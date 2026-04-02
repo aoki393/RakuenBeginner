@@ -58,9 +58,6 @@ namespace PLAYERTWO.PlatformerProject
             }
         }
 
-        /// <summary>
-        /// Unity 生命周期方法，启动时获取 EntityStateManager 组件并订阅其事件。
-        /// </summary>
         protected virtual void Start()
         {
             // 如果没有手动赋值，则尝试从父物体获取 EntityStateManager 组件

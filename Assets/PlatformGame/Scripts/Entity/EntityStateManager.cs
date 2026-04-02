@@ -9,10 +9,6 @@ namespace PLAYERTWO.PlatformerProject
 	/// </summary>
 	public abstract class EntityStateManager : MonoBehaviour
 	{
-		/// <summary>
-		/// 状态管理相关事件集合（进入状态、退出状态、状态切换等）。
-		/// 具体定义在 EntityStateManagerEvents 中。
-		/// </summary>
 		public EntityStateManagerEvents events;
 	}
 
@@ -36,7 +32,8 @@ namespace PLAYERTWO.PlatformerProject
 		/// <summary>
 		/// 当前激活的状态实例。
 		/// </summary>
-		public EntityState<T> current { get; protected set; }
+		public EntityState<T> Current { get; protected set; }
+		[SerializeField] private string _currentStateName;
 
 		/// <summary>
 		/// 上一个状态实例。
@@ -46,7 +43,7 @@ namespace PLAYERTWO.PlatformerProject
 		/// <summary>
 		/// 当前状态在状态列表中的索引位置。
 		/// </summary>
-		public int index => m_list.IndexOf(current);
+		public int index => m_list.IndexOf(Current);
 
 		/// <summary>
 		/// 上一个状态在状态列表中的索引位置。
@@ -58,16 +55,31 @@ namespace PLAYERTWO.PlatformerProject
 		/// </summary>
 		public T entity { get; protected set; }
 
-		/// <summary>
-		/// 抽象方法，必须由子类实现，用于返回所有状态实例的列表。
-		/// </summary>
-		protected abstract List<EntityState<T>> GetStateList();
+		protected virtual void Start()
+		{
+			InitializeEntity();
+			InitializeStates();
+		}
 
-		/// <summary>
-		/// 虚方法，默认实现为从当前 GameObject 获取实体组件 T。
-		/// 可以被子类重写自定义实体初始化逻辑。
-		/// </summary>
+		protected virtual void Update()
+		{
+			// 假设有状态切换的逻辑
+			if (Current != null)
+			{
+				var newName = Current.GetType().Name;
+				if (_currentStateName != newName)
+				{
+					_currentStateName = newName;
+					// 可选:强制刷新 Inspector
+					UnityEditor.EditorUtility.SetDirty(this);
+				}
+			}
+		}
+
+
 		protected virtual void InitializeEntity() => entity = GetComponent<T>();
+
+		protected abstract List<EntityState<T>> GetStateList();
 
 		/// <summary>
 		/// 初始化状态列表和状态字典。
@@ -92,7 +104,7 @@ namespace PLAYERTWO.PlatformerProject
 			// 如果状态列表不为空，默认激活第一个状态
 			if (m_list.Count > 0)
 			{
-				current = m_list[0];
+				Current = m_list[0];
 			}
 		}
 
@@ -133,17 +145,17 @@ namespace PLAYERTWO.PlatformerProject
 			if (to != null && Time.timeScale > 0)
 			{
 				// 如果有当前状态，调用退出逻辑并触发退出事件
-				if (current != null)
+				if (Current != null)
 				{
-					current.Exit(entity);
-					events.onExit.Invoke(current.GetType());
-					last = current;
+					Current.Exit(entity);
+					events.onExit.Invoke(Current.GetType());
+					last = Current;
 				}
 
 				// 切换到目标状态，调用进入逻辑并触发进入事件和状态切换事件
-				current = to;
-				current.Enter(entity);
-				events.onEnter.Invoke(current.GetType());
+				Current = to;
+				Current.Enter(entity);
+				events.onEnter.Invoke(Current.GetType());
 				events.onChange?.Invoke();
 			}
 		}
@@ -155,12 +167,12 @@ namespace PLAYERTWO.PlatformerProject
 		/// <returns>如果当前状态类型等于参数类型返回 true，否则返回 false。</returns>
 		public virtual bool IsCurrentOfType(Type type)
 		{
-			if (current == null)
+			if (Current == null)
 			{
 				return false;
 			}
 
-			return current.GetType() == type;
+			return Current.GetType() == type;
 		}
 
 		/// <summary>
@@ -170,15 +182,13 @@ namespace PLAYERTWO.PlatformerProject
 		/// <returns>如果包含返回 true，否则 false。</returns>
 		public virtual bool ContainsStateOfType(Type type) => m_states.ContainsKey(type);
 
-		/// <summary>
-		/// 每帧调用，用于更新当前状态的逻辑。
-		/// </summary>
+		#region Entity调用
 		public virtual void Step()
 		{
 			// 确保当前状态存在且游戏未暂停
-			if (current != null && Time.timeScale > 0)
+			if (Current != null && Time.timeScale > 0)
 			{
-				current.Step(entity);
+				Current.Step(entity);
 			}
 		}
 
@@ -188,19 +198,11 @@ namespace PLAYERTWO.PlatformerProject
 		/// <param name="other">碰撞到的其他碰撞体。</param>
 		public virtual void OnContact(Collider other)
 		{
-			if (current != null && Time.timeScale > 0)
+			if (Current != null && Time.timeScale > 0)
 			{
-				current.OnContact(entity, other);
+				Current.OnContact(entity, other);
 			}
-		}
-
-		/// <summary>
-		/// Unity 生命周期 Start，负责初始化实体和状态。
-		/// </summary>
-		protected virtual void Start()
-		{
-			InitializeEntity();
-			InitializeStates();
-		}
+		}	
+		#endregion	
 	}
 }
