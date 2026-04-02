@@ -118,6 +118,7 @@ namespace PLAYERTWO.PlatformerProject
 			// }
 		}
         public virtual void FaceDirectionSmooth(Vector3 direction) => FaceDirection(direction, Stats.current.rotationSpeed);
+		public bool IsInputRunning() => Inputs.GetRun();
 
         public virtual void Decelerate() => Decelerate(Stats.current.deceleration);
         public virtual void Friction()
