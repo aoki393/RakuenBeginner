@@ -30,6 +30,7 @@ namespace PLAYERTWO.PlatformerProject
 		protected InputAction m_glide;
 		protected InputAction m_dash;
 		protected InputAction m_grindBrake;
+		protected InputAction m_cameraStop;
 
 		// 主摄像机引用，用于计算相对移动方向
 		protected Camera m_camera;
@@ -60,10 +61,11 @@ namespace PLAYERTWO.PlatformerProject
 			// m_stomp = actions["Stomp"];
 			// m_releaseLedge = actions["ReleaseLedge"];
 			// m_pause = actions["Pause"];
-			// m_look = actions["Look"];
+			m_look = actions["Look"];
 			// m_glide = actions["Glide"];
 			// m_dash = actions["Dash"];
 			// m_grindBrake = actions["Grind Brake"];
+			m_cameraStop = actions["StopCameraOrbit"];
 		}
 
 		/// <summary>
@@ -138,6 +140,8 @@ namespace PLAYERTWO.PlatformerProject
 		// 以下是输入状态的快捷访问方法
 		public virtual bool GetRun() => m_run.IsPressed();
 		public virtual bool GetRunUp() => m_run.WasReleasedThisFrame();
+
+		public virtual bool GetCameraOrbitStop() => m_cameraStop.IsPressed();
 
 		/// <summary>
 		/// 判断是否触发跳跃（支持跳跃缓冲）

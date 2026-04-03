@@ -12,6 +12,7 @@ namespace PLAYERTWO.PlatformerProject
         public PlayerInputManager Inputs { get; protected set; }
         public PlayerStatsManager Stats { get; protected set; }
         // States在Entity里已定义
+		public PlayerEvents Events;
 
         protected override void Awake()
         {
@@ -71,6 +72,7 @@ namespace PLAYERTWO.PlatformerProject
 				if (Inputs.GetJumpDown()) // 按下跳跃键
 				{
 					Jump(Stats.current.maxJumpHeight);
+					Events.OnJump?.Invoke(); // 触发跳跃事件，通知动画更新
 				}
 			}
 
@@ -110,6 +112,8 @@ namespace PLAYERTWO.PlatformerProject
 
 			// 调用底层 Accelerate(方向, 转向阻尼, 加速度, 最大速度)
 			Accelerate(direction, turningDrag, finalAcceleration, topSpeed);
+
+			Events.OnRun?.Invoke(); // 触发跑步事件，通知动画更新
 
 			// 如果刚松开跑步键，限制最大速度，避免瞬间超速
 			// if (Inputs.GetRunUp())

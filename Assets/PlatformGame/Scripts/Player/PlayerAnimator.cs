@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace PLAYERTWO.PlatformerProject
@@ -21,15 +22,42 @@ namespace PLAYERTWO.PlatformerProject
             {
                 Debug.LogError("PlayerAnimator: Animator component is not assigned.");
             }
+            
+        }
+        void Start()
+        {
+            player.States.events.onChange.AddListener(OnStateChange);
+            player.Events.OnRun.AddListener(OnRun);
+            // player.Events.OnJump.AddListener(OnJump);
+        }
+        void OnDestroy()
+        {
+            player.States.events.onChange.RemoveListener(OnStateChange);
+            player.Events.OnRun.RemoveListener(OnRun);
+            // player.Events.OnJump.RemoveListener(OnJump);
+        }
+
+
+        private void OnStateChange()
+        {
+            animator.SetInteger(stateName, player.States.index);
+        }
+        private void OnRun()
+        {
+            animator.SetBool(isRunningName, player.IsInputRunning());
+        }
+        private void OnJump()
+        {
+            animator.SetFloat(verticalSpeedName, player.verticalVelocity.y);
         }
 
         void LateUpdate()
         {
             // 更新 Animator 参数
-            animator.SetInteger(stateName, player.States.index);
+            
             // animator.SetFloat(lateralSpeedName, player.lateralVelocity.magnitude);
             animator.SetFloat(verticalSpeedName, player.verticalVelocity.y);
-            animator.SetBool(isRunningName, player.IsInputRunning());
+            // animator.SetBool(isRunningName, player.IsInputRunning());
 
             // 其他参数根据需要添加
         }
