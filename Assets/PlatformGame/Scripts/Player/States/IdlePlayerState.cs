@@ -21,7 +21,8 @@ namespace PLAYERTWO.PlatformerProject
             player.Gravity();               // 应用重力
             // player.SnapToGround();          // 保持贴地
             player.Jump();                  // 允许跳跃
-            player.Fall();                  // 检测下落
+            player.Fall();                  // 非跳跃切换到Fall，比如脚下突然空了
+
             // player.Spin();                  // 检测旋转动作
             // player.PickAndThrow();          // 检测拾取/投掷
             // player.RegularSlopeFactor();    // 处理坡面影响

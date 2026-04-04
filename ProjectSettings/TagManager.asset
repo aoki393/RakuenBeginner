@@ -8,6 +8,7 @@ TagManager:
   - Hazard
   - Platform
   - Interactive/Rail
+  - VolumeWater
   layers:
   - Default
   - TransparentFX

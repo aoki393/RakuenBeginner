@@ -101,6 +101,7 @@ namespace PLAYERTWO.PlatformerProject
 			{
 				// 根据当前垂直速度的反方向作为反弹力度（只取 y 方向）
 				var force = -m_entity.velocity.y;
+				// var force = m_entity.verticalVelocity.y; // 一样的
 				// 限制反弹力度在设定范围内
 				force = Mathf.Clamp(force, reboundMinForce, reboundMaxForce);
 				// 设置垂直速度，让实体向上反弹

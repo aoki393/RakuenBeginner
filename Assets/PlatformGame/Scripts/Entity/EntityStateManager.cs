@@ -33,7 +33,7 @@ namespace PLAYERTWO.PlatformerProject
 		/// 当前激活的状态实例。
 		/// </summary>
 		public EntityState<T> Current { get; protected set; }
-		[SerializeField] private string _currentStateName;
+		// [SerializeField] private string _currentStateName; // 用于在 Inspector 中显示当前状态名称
 
 		/// <summary>
 		/// 上一个状态实例。
@@ -61,20 +61,20 @@ namespace PLAYERTWO.PlatformerProject
 			InitializeStates();
 		}
 
-		protected virtual void Update()
-		{
-			// 假设有状态切换的逻辑
-			if (Current != null)
-			{
-				var newName = Current.GetType().Name;
-				if (_currentStateName != newName)
-				{
-					_currentStateName = newName;
-					// 可选:强制刷新 Inspector
-					UnityEditor.EditorUtility.SetDirty(this);
-				}
-			}
-		}
+		// protected virtual void Update()
+		// {
+		// 	// 当状态切换时，更新Inspector的状态名称显示
+		// 	if (Current != null)
+		// 	{
+		// 		var newName = Current.GetType().Name;
+		// 		if (_currentStateName != newName)
+		// 		{
+		// 			_currentStateName = newName;
+		// 			// 可选:强制刷新 Inspector
+		// 			// UnityEditor.EditorUtility.SetDirty(this);
+		// 		}
+		// 	}
+		// }
 
 
 		protected virtual void InitializeEntity() => entity = GetComponent<T>();

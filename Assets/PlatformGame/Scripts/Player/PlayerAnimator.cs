@@ -27,13 +27,13 @@ namespace PLAYERTWO.PlatformerProject
         void Start()
         {
             player.States.events.onChange.AddListener(OnStateChange);
-            player.Events.OnRun.AddListener(OnRun);
+            player.playerEvents.OnRun.AddListener(OnRun);
             // player.Events.OnJump.AddListener(OnJump);
         }
         void OnDestroy()
         {
             player.States.events.onChange.RemoveListener(OnStateChange);
-            player.Events.OnRun.RemoveListener(OnRun);
+            player.playerEvents.OnRun.RemoveListener(OnRun);
             // player.Events.OnJump.RemoveListener(OnJump);
         }
 

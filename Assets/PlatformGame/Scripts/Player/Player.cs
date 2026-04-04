@@ -12,7 +12,14 @@ namespace PLAYERTWO.PlatformerProject
         public PlayerInputManager Inputs { get; protected set; }
         public PlayerStatsManager Stats { get; protected set; }
         // States在Entity里已定义
-		public PlayerEvents Events;
+		public PlayerEvents playerEvents;
+		public bool canJumpInAir=true; // 调试用，允许在空中跳跃
+		public bool onWater=false; // 是否在水中
+		public Collider water;
+		public float WaterSurface; // 水面高度，用于计算浮力
+		[Range(0f,1f)]
+		public float waterExposure=0.2f; // 浮起平衡状态时上半身的露出度
+		
 
         protected override void Awake()
         {
@@ -38,6 +45,37 @@ namespace PLAYERTWO.PlatformerProject
 				// StartGrind();
 			// });
         }
+		protected virtual void OnTriggerStay(Collider other)
+		{			
+			if (other.CompareTag("VolumeWater"))
+			{
+				if(!onWater && other.bounds.Contains(Position))
+				{
+					EnterWater(other);
+				}else if (onWater)
+				{
+					var exitPoint = Position + Vector3.down * height*0.1f; // 角色脚底再往下一点都不在水中时
+					if (!other.bounds.Contains(exitPoint))
+					{
+						ExitWater();
+					}
+				}
+			}
+		}
+		private void EnterWater(Collider other)
+		{
+			if(!onWater)
+			{
+				onWater = true;
+				water = other;
+				WaterSurface = other.bounds.max.y;
+				States.Change<SwimPlayerState>();
+			}
+		}
+		private void ExitWater()
+		{
+			onWater = false;
+		}
 
         public virtual void Gravity()
 		{
@@ -57,6 +95,15 @@ namespace PLAYERTWO.PlatformerProject
         // public virtual void FaceDirectionSmooth(Vector3 direction) => FaceDirection(direction, Stats.current.rotationSpeed); // 平滑转向输入方向
         public virtual void Jump()
         {
+			if (isGrounded || canJumpInAir)
+			{
+				if (Inputs.GetJumpDown()) // 按下跳跃键
+				{
+					Jump(Stats.current.maxJumpHeight);
+					playerEvents.OnJump?.Invoke(); // 触发跳跃事件，通知动画更新
+				}
+			}
+			
             // 是否可以进行二段 / 多段跳
 			// var canMultiJump = (JumpCounter > 0) && (JumpCounter < Stats.current.multiJumps);
 			// 土狼跳判定（离地一小段时间内仍然可以跳）
@@ -67,14 +114,15 @@ namespace PLAYERTWO.PlatformerProject
 
 			// 地面 / 轨道 / 多段跳 / 土狼跳条件满足时才允许跳跃
 			// if ((isGrounded || onRails || canMultiJump || canCoyoteJump) && holdJump)
-            if (isGrounded || onRails)
-			{
-				if (Inputs.GetJumpDown()) // 按下跳跃键
-				{
-					Jump(Stats.current.maxJumpHeight);
-					Events.OnJump?.Invoke(); // 触发跳跃事件，通知动画更新
-				}
-			}
+            // if (isGrounded || onRails)
+			// {
+			// 	if (Inputs.GetJumpDown()) // 按下跳跃键
+			// 	{
+			// 		Debug.Log("跳跃 GetJumpDown Log");
+			// 		Jump(Stats.current.maxJumpHeight);
+			// 		playerEvents.OnJump?.Invoke(); // 触发跳跃事件，通知动画更新
+			// 	}
+			// }
 
 			// 松开跳跃键时，如果还在上升，限制为最小跳跃高度（实现“按得短跳得低”的效果）
 			// if (Inputs.GetJumpUp() && (JumpCounter > 0) && (verticalVelocity.y > Stats.current.minJumpHeight))
@@ -113,7 +161,7 @@ namespace PLAYERTWO.PlatformerProject
 			// 调用底层 Accelerate(方向, 转向阻尼, 加速度, 最大速度)
 			Accelerate(direction, turningDrag, finalAcceleration, topSpeed);
 
-			Events.OnRun?.Invoke(); // 触发跑步事件，通知动画更新
+			playerEvents.OnRun?.Invoke(); // 触发跑步事件，通知动画更新
 
 			// 如果刚松开跑步键，限制最大速度，避免瞬间超速
 			// if (Inputs.GetRunUp())
@@ -121,18 +169,34 @@ namespace PLAYERTWO.PlatformerProject
 			// 	lateralVelocity = Vector3.ClampMagnitude(lateralVelocity, topSpeed);
 			// }
 		}
+		public virtual void AccelerateToInputDirection()
+		{
+			var inputDirection = Inputs.GetMovementCameraDirection(); // 输入相对于相机的方向
+			Accelerate(inputDirection);
+		}
+
         public virtual void FaceDirectionSmooth(Vector3 direction) => FaceDirection(direction, Stats.current.rotationSpeed);
 		public bool IsInputRunning() => Inputs.GetRun();
 
         public virtual void Decelerate() => Decelerate(Stats.current.deceleration);
         public virtual void Friction()
 		{
-			if (OnSlopingGround())
-				Decelerate(Stats.current.slopeFriction); // 在斜坡上使用斜坡摩擦
-			else
-				Decelerate(Stats.current.friction);      // 普通摩擦
+			Decelerate(Stats.current.friction);
+
+			// if (OnSlopingGround())
+			// 	Decelerate(Stats.current.slopeFriction); // 在斜坡上使用斜坡摩擦
+			// else
+			// 	Decelerate(Stats.current.friction);      // 普通摩擦
 		}
 
+		public virtual void WaterAcceleration(Vector3 direction)
+		{
+			Accelerate(direction, Stats.current.waterTurningDrag, Stats.current.swimAcceleration, Stats.current.swimTopSpeed);
+		}
+		public virtual void WaterFaceDirection(Vector3 direction)
+		{
+			FaceDirection(direction, Stats.current.waterRotationSpeed);
+		}
         
     }
 }

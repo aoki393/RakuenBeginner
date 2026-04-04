@@ -41,9 +41,7 @@ namespace PLAYERTWO.PlatformerProject
 		// 负责角色的基本移动、碰撞等物理交互
 		protected virtual void InitializeController()
 		{
-		    // 获取当前物体上的 CharacterController 组件
 		    controller = GetComponent<CharacterController>();
-		    // 如果没有，就动态添加一个 CharacterController
 		    if (!controller)
 		    {
 		        // controller = gameObject.AddComponent<CharacterController>();
@@ -52,9 +50,9 @@ namespace PLAYERTWO.PlatformerProject
 		    }
 
 		    // skinWidth 表示碰撞器表面到实际碰撞检测边界的距离（防止卡住用的小偏移）
-		    controller.skinWidth = 0.005f;
+		    // controller.skinWidth = 0.005f;
 		    // minMoveDistance 为最小移动距离（设为 0 表示即使移动非常小也会被检测到）
-		    controller.minMoveDistance = 0;
+		    // controller.minMoveDistance = 0;
 		    // 记录角色控制器的初始高度（用于后续复位或高度调整）
 		    originalHeight = controller.height;
 		}
@@ -182,7 +180,7 @@ namespace PLAYERTWO.PlatformerProject
 		            else
 		            {
 		                // 否则是接近高台边缘的情况
-		                HandleHighLedge(hit);
+		                HandleHighLedge(hit);						
 		            }
 		        }
 		        // 已经在地面状态
@@ -249,10 +247,10 @@ namespace PLAYERTWO.PlatformerProject
 		protected virtual void HandlePosition()
 		{
 		    // 计算当前位置与上一帧位置的距离（位移长度）
-		    positionDelta = (position - lastPosition).magnitude;
+		    positionDelta = (Position - lastPosition).magnitude;
 
 		    // 更新上一帧位置
-		    lastPosition = position;
+		    lastPosition = Position;
 		}
 
 		// 处理碰撞体的穿透修正,碰到别的东西给反推回来
@@ -263,7 +261,7 @@ namespace PLAYERTWO.PlatformerProject
 		    // 获取盒碰撞器在 Y 方向的半高（考虑 stepOffset 的一半）
 		    var ySize = (height - controller.stepOffset * 0.5f) * 0.5f;
 		    // 盒碰撞器的中心点（向上偏移 stepOffset 一半）
-		    var origin = position + Vector3.up * controller.stepOffset * 0.5f;
+		    var origin = Position + Vector3.up * controller.stepOffset * 0.5f;
 		    // 盒碰撞器的半尺寸
 		    var halfExtents = new Vector3(xzSize, ySize, xzSize);
 
@@ -286,7 +284,7 @@ namespace PLAYERTWO.PlatformerProject
 		        {
 		            // ComputePenetration 计算两个碰撞体的分离向量和距离
 		            if (Physics.ComputePenetration(
-		                m_penetratorCollider, position, Quaternion.identity,
+		                m_penetratorCollider, Position, Quaternion.identity,
 		                m_penetrationBuffer[i], m_penetrationBuffer[i].transform.position,
 		                m_penetrationBuffer[i].transform.rotation, 
 		                out var direction, out float distance))
@@ -396,7 +394,7 @@ namespace PLAYERTWO.PlatformerProject
 		protected virtual void HandleSlopeLimit(RaycastHit hit) { }
 
 		// 处理高地（空实现，子类重写）
-		protected virtual void HandleHighLedge(RaycastHit hit) { }
+		protected virtual void HandleHighLedge(RaycastHit hit) { Debug.Log("HandleHighLedge 暂未实现"); }
 
 		protected virtual void OnUpdate() { }
 
@@ -470,23 +468,23 @@ namespace PLAYERTWO.PlatformerProject
 
 
 		// 根据斜坡角度调整速度（模拟上坡减速、下坡加速）
-		public virtual void SlopeFactor(float upwardForce, float downwardForce)
-		{
-		    // 必须接触地面，且当前地面是斜坡，才进行处理
-		    if (!isGrounded || !OnSlopingGround()) return;
+		// public virtual void SlopeFactor(float upwardForce, float downwardForce)
+		// {
+		//     // 必须接触地面，且当前地面是斜坡，才进行处理
+		//     if (!isGrounded || !OnSlopingGround()) return;
 
-		    // factor 表示斜坡倾斜程度（法线越接近 Vector3.up，factor 越接近 1）
-		    var factor = Vector3.Dot(Vector3.up, groundNormal);
-		    // 检查当前水平速度是否沿着斜坡向下
-		    var downwards = Vector3.Dot(localSlopeDirection, lateralVelocity) > 0;
-		    // 根据方向选择上坡力或下坡力
-		    var multiplier = downwards ? downwardForce : upwardForce;
-		    // 计算本帧速度调整量
-		    var delta = factor * multiplier * Time.deltaTime;
+		//     // factor 表示斜坡倾斜程度（法线越接近 Vector3.up，factor 越接近 1）
+		//     var factor = Vector3.Dot(Vector3.up, groundNormal);
+		//     // 检查当前水平速度是否沿着斜坡向下
+		//     var downwards = Vector3.Dot(localSlopeDirection, lateralVelocity) > 0;
+		//     // 根据方向选择上坡力或下坡力
+		//     var multiplier = downwards ? downwardForce : upwardForce;
+		//     // 计算本帧速度调整量
+		//     var delta = factor * multiplier * Time.deltaTime;
 
-		    // 在 localSlopeDirection 方向上增加或减少速度
-		    lateralVelocity += localSlopeDirection * delta;
-		}
+		//     // 在 localSlopeDirection 方向上增加或减少速度
+		//     lateralVelocity += localSlopeDirection * delta;
+		// }
 
 
 		// 将角色吸附到地面（防止悬空）
