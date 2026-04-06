@@ -55,7 +55,7 @@ namespace PlatformGame
         protected virtual void Awake()
         {
             m_animator = GetComponent<Animator>(); // 获取 Animator 组件引用
-            Debug.Log($"UIAnimator: Awake - gameObject.name={gameObject.name}");
+            // Debug.Log($"UIAnimator: Awake - gameObject.name={gameObject.name}");
 
             // if (hidenOnAwake)
             // {
@@ -67,7 +67,7 @@ namespace PlatformGame
         public void OnHideComplete()
         {
             gameObject.SetActive(false);
-            Debug.Log($"UIAnimator: OnHideComplete - gameObject.name={gameObject.name}");
+            // Debug.Log($"UIAnimator: OnHideComplete - gameObject.name={gameObject.name}");
         }
     }
 }

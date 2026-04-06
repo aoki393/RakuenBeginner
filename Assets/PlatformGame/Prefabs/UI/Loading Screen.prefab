@@ -51,7 +51,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 9e1237515e0e58845a7148af0202d6fd, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -79,7 +79,6 @@ MonoBehaviour:
   OnHide:
     m_PersistentCalls:
       m_Calls: []
-  hidenOnAwake: 1
   normalTrigger: Normal
   showTrigger: Show
   hideTrigger: Hide

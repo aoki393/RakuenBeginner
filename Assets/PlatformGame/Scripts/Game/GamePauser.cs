@@ -8,24 +8,12 @@ namespace PlatformGame
     /// </summary>
 
     [RequireComponent(typeof(GameInputManager))]
-    public class GamePause : MonoBehaviour
+    [AddComponentMenu("PLAYER TWO/Platformer Project/Game/Game Pauser")]
+    public class GamePauser : Singleton<GamePauser>
     {
-        protected GameInputManager m_inputManager;
         private bool isPaused = false; 
         public UnityEvent<bool> OnPauseEvent; // 暂停事件，让UI、Audio等订阅        
 
-        void Awake()
-        {
-            m_inputManager = GetComponent<GameInputManager>(); 
-        }
-
-        void Update()
-        {
-            if (m_inputManager.GetPauseDown())
-            {
-                TogglePause();
-            }
-        }
         public void TogglePause()
         {
             isPaused = !isPaused;

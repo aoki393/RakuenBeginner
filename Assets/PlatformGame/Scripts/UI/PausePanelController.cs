@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace PlatformGame
 {
@@ -10,7 +11,7 @@ namespace PlatformGame
     /// </summary>
     public class PausePanelController : MonoBehaviour
     {
-        public GamePause gamePause; // 响应游戏暂停事件，同时也调用游戏暂停方法
+        // public GamePauser gamePauser=GamePauser.instance; // 响应游戏暂停事件，同时也调用游戏暂停方法
         private UIAnimator uiAnimator; // Show和Hide动画交给 UIAnimator 组件处理
         public Button btnresume;
         public Button btnrestart;
@@ -18,14 +19,9 @@ namespace PlatformGame
         public Button btnquit;
         void Start()
         {
-            if(gamePause == null)
-            {
-                gamePause = FindFirstObjectByType<GamePause>(); // 挂载在__GameController__上
-                Debug.Log("已自动引用GamePause组件");
-            }
             uiAnimator = GetComponent<UIAnimator>(); // 面板上面需要挂载 UIAnimator 组件
 
-            gamePause.OnPauseEvent.AddListener(OnPause);
+            GamePauser.instance.OnPauseEvent.AddListener(OnPause);
 
             btnresume.onClick.AddListener(OnResumeClicked);
             btnrestart.onClick.AddListener(OnRestartClicked);
@@ -48,18 +44,19 @@ namespace PlatformGame
 
         void OnResumeClicked()
         {
-            gamePause.TogglePause();
+            GamePauser.instance.TogglePause();
         }
         void OnRestartClicked()
         {
             // TODO：重新加载当前场景
-            // SceneManagement.SceneManager.LoadScene(SceneManagement.SceneManager.GetActiveScene().name); 
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
             Debug.Log("TODO: 重新开始当前关卡");
         }
         void OnMenuClicked()
         {
-            // TODO: 返回主菜单
-            Debug.Log("TODO: 返回主菜单");
+            // TODO: 保存关卡数据
+            GameController.instance.LoadScene("MainMenu");
+            GamePauser.instance.TogglePause(); // 必须恢复TimeScale，否则LoadScene的协程会卡住😅
         }
         void OnQuitClicked()
         {
@@ -73,7 +70,7 @@ namespace PlatformGame
         
         private void OnDestroy()
         {
-            gamePause.OnPauseEvent.RemoveListener(OnPause);
+            GamePauser.instance.OnPauseEvent.RemoveListener(OnPause);
             btnresume.onClick.RemoveListener(OnResumeClicked);
             btnrestart.onClick.RemoveListener(OnRestartClicked);    
             btnmenu.onClick.RemoveListener(OnMenuClicked);

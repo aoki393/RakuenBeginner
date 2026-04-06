@@ -8,7 +8,7 @@ namespace PlatformGame
     /// 游戏系统级输入管理器（与Player的玩家输入管理器分离）。  
     /// 涉及功能：1、暂停游戏。
     /// </summary>
-
+    [AddComponentMenu("PLAYER TWO/Platformer Project/Game/Game Input Manager")]
     public class GameInputManager : MonoBehaviour
     {
         // 输入动作资源（在 Input System 中配置的 InputActionAsset）

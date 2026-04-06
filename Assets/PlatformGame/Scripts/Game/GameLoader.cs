@@ -118,6 +118,7 @@ namespace PlatformGame
 			while (!operation.isDone)
 			{
 				LoadingProgress = operation.progress; // progress 取值范围通常是 0~0.9，完成时才为 1
+				// Debug.Log($"当前加载进度: {LoadingProgress}");
 				yield return null; // 等待下一帧
 			}
 
