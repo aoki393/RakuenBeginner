@@ -102,7 +102,7 @@ namespace PlatformGame
 			// 激活加载界面并显示动画
 			if (useLoadingScreen)
 			{
-				loadingScreen.SetActive(true);
+				// loadingScreen.SetActive(true);
 				loadingScreen.Show();
 			}
 			Debug.Log($"开始加载场景: {scene}");
@@ -134,7 +134,7 @@ namespace PlatformGame
 			// 隐藏加载界面
 			if (useLoadingScreen)
 			{
-				loadingScreen.SetActive(false);
+				// loadingScreen.SetActive(false);
 				loadingScreen.Hide();
 			}
 

@@ -25,7 +25,6 @@ namespace PLAYERTWO.PlatformerProject
 		protected InputAction m_airDive;
 		protected InputAction m_stomp;
 		protected InputAction m_releaseLedge;
-		protected InputAction m_pause;
 		protected InputAction m_look;
 		protected InputAction m_glide;
 		protected InputAction m_dash;
@@ -168,7 +167,6 @@ namespace PLAYERTWO.PlatformerProject
 		public virtual bool GetGlide() => m_glide.IsPressed();
 		public virtual bool GetDashDown() => m_dash.WasPressedThisFrame();
 		public virtual bool GetGrindBrake() => m_grindBrake.IsPressed();
-		public virtual bool GetPauseDown() => m_pause.WasPressedThisFrame();
 
 		/// <summary>
 		/// 将输入值按给定死区重新映射到 0-1

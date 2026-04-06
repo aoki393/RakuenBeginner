@@ -21,14 +21,13 @@ namespace PlatformGame
         public UnityEvent OnHide;
 
         // 是否在 Awake 时隐藏 UI
-        public bool hidenOnAwake;
+        // public bool hidenOnAwake;
 
         // Animator 中的触发器名称
         public string normalTrigger = "Normal"; // 默认状态触发器
         public string showTrigger = "Show";     // 显示动画触发器
         public string hideTrigger = "Hide";     // 隐藏动画触发器
 
-        // 内部 Animator 引用
         protected Animator m_animator;
 
         /// <summary>
@@ -36,6 +35,7 @@ namespace PlatformGame
         /// </summary>
         public virtual void Show()
         {
+            gameObject.SetActive(true);
             m_animator.SetTrigger(showTrigger); // 设置 Animator 触发器
             OnShow?.Invoke();                   // 调用显示事件（如果有绑定）
         }
@@ -50,23 +50,24 @@ namespace PlatformGame
         }
 
         /// <summary>
-        /// 设置 GameObject 的激活状态
-        /// </summary>
-        /// <param name="value">要设置的激活状态</param>
-        public virtual void SetActive(bool value) => gameObject.SetActive(value);
-
-        /// <summary>
         /// 初始化 Animator 组件，并根据 hidenOnAwake 设置初始状态
         /// </summary>
         protected virtual void Awake()
         {
             m_animator = GetComponent<Animator>(); // 获取 Animator 组件引用
+            Debug.Log($"UIAnimator: Awake - gameObject.name={gameObject.name}");
 
-            if (hidenOnAwake)
-            {
-                // 如果 Awake 时需要隐藏，则播放隐藏动画的最后一帧
-                m_animator.Play(hideTrigger, 0, 1);
-            }
+            // if (hidenOnAwake)
+            // {
+            //     // 如果 Awake 时需要隐藏，则播放隐藏动画的最后一帧
+            //     m_animator.Play(hideTrigger, 0, 1);
+            // }
+        }
+
+        public void OnHideComplete()
+        {
+            gameObject.SetActive(false);
+            Debug.Log($"UIAnimator: OnHideComplete - gameObject.name={gameObject.name}");
         }
     }
 }
