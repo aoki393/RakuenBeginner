@@ -8,6 +8,9 @@ namespace PLAYERTWO.PlatformerProject
     {
         public UnityEvent OnJump;
         public UnityEvent OnRun;
+        public UnityEvent OnDashStarted;
+        public UnityEvent OnDashEnded;
+        public UnityEvent OnHurt;
 
     }
 }

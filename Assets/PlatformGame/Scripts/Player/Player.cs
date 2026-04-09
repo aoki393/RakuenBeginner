@@ -5,6 +5,7 @@ namespace PLAYERTWO.PlatformerProject
     [RequireComponent(typeof(PlayerInputManager))]   // 玩家输入管理器（处理按键、手柄等输入）
 	[RequireComponent(typeof(PlayerStatsManager))]   // 玩家数值管理器（存储移动速度、跳跃力等数值配置）
 	[RequireComponent(typeof(PlayerStateManager))]   // 玩家状态机管理器（Idle、Run、Jump 等状态）
+    [RequireComponent(typeof(Health))]
     public class Player : Entity<Player>
     {
         public int JumpCounter{ get; protected set; }
@@ -19,6 +20,10 @@ namespace PLAYERTWO.PlatformerProject
 		public float WaterSurface; // 水面高度，用于计算浮力
 		[Range(0f,1f)]
 		public float waterExposure=0.2f; // 浮起平衡状态时上半身的露出度
+
+		// private Health health;
+		public Transform LastCheckpoint;
+		public bool inEnemyIsland=false;
 		
 
         protected override void Awake()
@@ -27,6 +32,10 @@ namespace PLAYERTWO.PlatformerProject
             Inputs = GetComponent<PlayerInputManager>();
             Stats = GetComponent<PlayerStatsManager>();
             InitializeStateManager();
+
+			// health = GetComponent<Health>();
+
+			
 
             // 监听落地事件，重置跳跃/空中技能次数
 			// entityEvents.OnGroundEnter.AddListener(() =>
@@ -45,9 +54,16 @@ namespace PLAYERTWO.PlatformerProject
 				// StartGrind();
 			// });
         }
+		void Start()
+		{
+			if(LastCheckpoint == null)
+			{
+				Debug.LogError("初始Checkpoint 没有配置！");
+			}
+		}
 		protected virtual void OnTriggerStay(Collider other)
 		{			
-			if (other.CompareTag("VolumeWater"))
+			if (other.CompareTag(GameTags.VolumeWater))
 			{
 				if(!onWater && other.bounds.Contains(Position))
 				{
@@ -196,6 +212,55 @@ namespace PLAYERTWO.PlatformerProject
 		public virtual void WaterFaceDirection(Vector3 direction)
 		{
 			FaceDirection(direction, Stats.current.waterRotationSpeed);
+		}
+
+        public override void ApplyDamage(int amount, Vector3 origin)
+        {
+            // if(!health.IsEmpty && !health.Recovering)
+			// {
+			// 	health.Damage(amount);
+			
+			playerEvents.OnHurt?.Invoke(); // 触发受伤事件，通知声音播放
+
+			// 受击回到上一个检查点位置
+			FlashMoveToLastCheckpoint();
+
+			// }
+        }
+
+		/// <summary>
+		/// 受击回到上一个检查点位置，需要先解除CharacterController的控制并重置姿态
+		/// </summary>
+		private void FlashMoveToLastCheckpoint()
+		{
+			controller.enabled = false;
+
+			velocity = Vector3.zero; // 清空速度
+			transform.SetPositionAndRotation(LastCheckpoint.position, Quaternion.Euler(0, -90, 0)); // 重置姿态
+			inEnemyIsland=false; // 狗日的，瞬移没受到Island边缘的Trigger检测，所以需要手动重置
+
+            States.Change<IdlePlayerState>();
+
+			controller.enabled = true;
+		}
+
+		void OnTriggerEnter(Collider other)
+		{
+			if(other.CompareTag(GameTags.Checkpoint))
+			{
+				LastCheckpoint = other.transform;
+			}
+			if(other.CompareTag(GameTags.EnemyIsland))
+			{
+				inEnemyIsland=true;
+			}
+		}
+		void OnTriggerExit(Collider other)
+		{
+			if(other.CompareTag(GameTags.EnemyIsland))
+			{
+				inEnemyIsland=false;
+			}
 		}
         
     }

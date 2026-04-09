@@ -15,7 +15,7 @@ namespace PLAYERTWO.PlatformerProject
 	/// 即可创建新的玩家数值配置文件。
 	/// </summary>
 	[CreateAssetMenu(
-		fileName = "NewPlayerStats",
+		fileName = "PlayerStats",
 		menuName = "PLAYER TWO/Platformer Project/Player/New Player Stats"
 	)]
 	public class PlayerStats : EntityStats<PlayerStats>

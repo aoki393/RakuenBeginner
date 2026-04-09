@@ -19,8 +19,20 @@ namespace PLAYERTWO.PlatformerProject
         /// 用于识别敌人对象（如攻击判定、AI 逻辑等）。
         /// </summary>
         public static string Enemy = "Enemy";
+        /// <summary>
+        /// 敌人岛的标签。
+        /// 用于标记player是否在Enemy所在的岛上。
+        /// </summary>
+        public static string EnemyIsland = "Volume/EnemyIsland";
 
         /// <summary>
+        /// 检查点的标签。
+        /// 用于记录玩家位置（如死亡后返回检查点）。
+        /// </summary>
+        public static string Checkpoint = "Volume/Checkpoint";
+
+
+
         /// 危险区域或陷阱的标签。
         /// 用于判定伤害区域（如尖刺、火焰等）。
         /// </summary>

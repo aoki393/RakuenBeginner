@@ -8,7 +8,12 @@ TagManager:
   - Hazard
   - Platform
   - Interactive/Rail
-  - VolumeWater
+  - Surface/Grass
+  - Surface/Wood
+  - Surface/Metal
+  - Volume/Water
+  - Volume/EnemyIsland
+  - Volume/Checkpoint
   layers:
   - Default
   - TransparentFX

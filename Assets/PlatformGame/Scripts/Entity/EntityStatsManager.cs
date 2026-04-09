@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PLAYERTWO.PlatformerProject
 {
-    // 泛型抽象类，用于管理指定类型的属性集，T 必须继承自 EntityStats<T>
+    // 泛型抽象类，用于管理指定类型的属性集
     public abstract class EntityStatsManager<T> : MonoBehaviour where T : EntityStats<T>
     {
         // 存放所有可用的属性集（例如不同难度或不同状态的属性）
