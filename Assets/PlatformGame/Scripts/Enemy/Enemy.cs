@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -14,12 +15,12 @@ namespace PLAYERTWO.PlatformerProject
         public EnemyStatsManager Stats { get; protected set; }
 
 		public WaypointManager Waypoints { get; protected set; }
-        public bool IsPatrol { get; protected set; } = true;
-        public bool IsChase { get; protected set; } = false;
 
 		// public Health health { get; protected set; }
 
-		public Player Player;// { get; protected set; }
+		public Player Player { get; protected set; }
+		public bool loseSight; // 失去视野标志，用于ChaseState丢失目标后缓冲时间内保持静止，也用来设置动画状态
+		public float loseSightBufferTime = 3f; // 失去视野缓冲时间（TODO：改为从Stats里配置
 
 		// 初始化组件引用
 		protected virtual void InitializeStatsManager() => Stats = GetComponent<EnemyStatsManager>();
@@ -44,7 +45,7 @@ namespace PLAYERTWO.PlatformerProject
 		}
 
 		/// <summary>
-		/// 对敌人造成伤害，并根据血量状态触发相应事件
+		/// 敌人受到伤害，根据血量状态触发相应事件
 		/// </summary>
 		/// <param name="amount">伤害值</param>
 		/// <param name="origin">伤害来源位置</param>
@@ -112,7 +113,7 @@ namespace PLAYERTWO.PlatformerProject
         					enemyEvents.OnPlayerContact?.Invoke(); // 触发接触事件
 
                             // 暂停追击，回到巡逻状态
-                            // States.Change<PatrolEnemyState>();
+							// 现在的逻辑是player被攻击后瞬移回上一个检查点，此时逻辑会进入 HandleSight() 执行追逐时的缓冲，这里就不用再处理了
         				}
         			}
         		}
@@ -139,6 +140,7 @@ namespace PLAYERTWO.PlatformerProject
         					Player = player; // 记录玩家引用
         					enemyEvents.OnPlayerSpotted?.Invoke(); // 触发发现玩家事件
 
+                            loseSight = false; // 设置发现玩家标志
                             States.Change<ChaseEnemyState>();
 
         					return;
@@ -157,10 +159,22 @@ namespace PLAYERTWO.PlatformerProject
         				
         			Player = null; // 解除锁定
         			enemyEvents.OnPlayerScaped?.Invoke(); // 玩家逃脱时表现（暂无）
-                    States.Change<PatrolEnemyState>();
+
+					loseSight = true; // 设置失去视野标志
+					velocity = Vector3.zero; // 停止移动
+					StartCoroutine(ChangeToPatrolState());     // 实现一个丢失玩家后的缓冲时间，不立刻转到巡逻状态
         		}
         	}
         }
+		IEnumerator ChangeToPatrolState()
+		{
+			yield return new WaitForSeconds(loseSightBufferTime);
+			// 如果玩家在这个缓冲时间又捕捉到，就没必要切换了
+			if (Player == null)
+			{
+				States.Change<PatrolEnemyState>();
+			}
+		}
 
         void OnDrawGizmos()
         {

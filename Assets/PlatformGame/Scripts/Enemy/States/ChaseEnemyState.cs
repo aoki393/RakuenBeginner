@@ -17,11 +17,15 @@ namespace PLAYERTWO.PlatformerProject
         {
             enemy.Gravity(); // 应用重力
 
-            var direction = enemy.Player.transform.position - enemy.transform.position;
-            direction.Normalize();
+            if (!enemy.loseSight)
+            {
+                var direction = enemy.Player.transform.position - enemy.transform.position;
+                direction.y = 0; // 忽略垂直方向
+                direction.Normalize();
 
-            enemy.Accelerate(direction, enemy.Stats.current.followAcceleration, enemy.Stats.current.followTopSpeed);
-            enemy.FaceDirectionSmooth(direction);
+                enemy.Accelerate(direction, enemy.Stats.current.followAcceleration, enemy.Stats.current.followTopSpeed);
+                enemy.FaceDirectionSmooth(direction);
+            }            
         }
         public override void OnContact(Enemy enemy, Collider other)
         {

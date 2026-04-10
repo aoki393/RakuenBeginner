@@ -19,9 +19,9 @@ namespace PLAYERTWO.PlatformerProject
 
         void Update()
         {
-            animator.SetBool("isPatrol", Enemy.IsPatrol);
-            animator.SetBool("isChase", Enemy.IsChase);
             animator.SetBool("idle", Enemy.IsIdle);
+            animator.SetBool("loseSight", Enemy.loseSight);
+            animator.SetInteger("State", Enemy.States.index);
         }
     }
 }
