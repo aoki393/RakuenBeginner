@@ -2,27 +2,36 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using PlatformGame;
 
 public class LevelCard : MonoBehaviour
 {
     [Header("卡片UI组件")]
-    [SerializeField] private TextMeshProUGUI levelIndexText;
+    [SerializeField] private TextMeshProUGUI levelNameText;
     [SerializeField] private TextMeshProUGUI starText;
     [SerializeField] private TextMeshProUGUI coinText;
-    [SerializeField] private Image completedImage;      // 完成时显示的标记（可选）
-    [SerializeField] private Image notCompletedImage;   // 未完成时显示的图片（你的要求）
+    [SerializeField] private TextMeshProUGUI completedTimeText;
+    [SerializeField] private GameObject completedSkin;      // 完成时显示的卡片样式
+    [SerializeField] private GameObject completedStarImage;
+    [SerializeField] private GameObject completedCoinImage;
+    // [SerializeField] private GameObject notCompletedImage;   // 未完成时显示的图片
+    [SerializeField] private Button cardButton;         // 卡片按钮（用于点击进入关卡）
 
     private LevelConfig currentLevelConfig;
     private LevelRecord currentRecord;
+    private LevelSelectScreen levelSelectScreen; // 用来卡片点击后Hide整个选择界面
 
-    public void Setup(LevelConfig config)
+    public void Setup(LevelConfig config, LevelSelectScreen selectScreen)
     {
         currentLevelConfig = config;
+        levelSelectScreen = selectScreen;
         
-        if (levelIndexText != null)
-            levelIndexText.text = $"关卡 {config.levelIndex}";
+        if (levelNameText != null)
+            levelNameText.text = $"{config.sceneName}";
 
         RefreshData();
+
+        cardButton.onClick.AddListener(OnCardClick);
     }
 
     public void RefreshData()
@@ -36,25 +45,34 @@ public class LevelCard : MonoBehaviour
                 starText.text = $"{currentRecord.starEarned} / {currentLevelConfig.totalStar}";
             if (coinText != null)
                 coinText.text = $"{currentRecord.coinEarned} / {currentLevelConfig.totalCoin}";
+            if (completedTimeText != null)
+                completedTimeText.text = $"{currentRecord.completedTime}";
             
-            if (completedImage != null) completedImage.gameObject.SetActive(true);
-            if (notCompletedImage != null) notCompletedImage.gameObject.SetActive(false);
+            if (completedSkin != null) completedSkin.gameObject.SetActive(true);
+
+            if(currentRecord.starEarned == currentLevelConfig.totalStar)
+            {
+                if (completedStarImage != null) completedStarImage.gameObject.SetActive(true);
+            }
+            if(currentRecord.coinEarned == currentLevelConfig.totalCoin)
+            {
+                if (completedCoinImage != null) completedCoinImage.gameObject.SetActive(true);
+            }
         }
         else
         {
             // 未完成：显示“暂未完成”图片
-            if (starText != null) starText.text = "? / ?";
-            if (coinText != null) coinText.text = "? / ?";
+            if (starText != null) starText.text = $"0 / {currentLevelConfig.totalStar}";
+            if (coinText != null) coinText.text = $"0 / {currentLevelConfig.totalCoin}"; 
             
-            if (completedImage != null) completedImage.gameObject.SetActive(false);
-            if (notCompletedImage != null) notCompletedImage.gameObject.SetActive(true);
+            if (completedSkin != null) completedSkin.gameObject.SetActive(false);
         }
     }
 
-    // 点击卡片进入关卡（需要你自己实现场景加载）
+    // 点击卡片进入关卡
     public void OnCardClick()
     {
-        Debug.Log($"进入关卡 {currentLevelConfig.levelIndex}");
-        // UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevelConfig.sceneName);
+        GameController.instance.LoadScene(currentLevelConfig.sceneName); // 用的配置里的名字，所以配置里sceneName要和场景文件名一致     
+        levelSelectScreen.Hide(); // 隐藏选择界面
     }
 }

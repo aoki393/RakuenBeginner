@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.bgtools.playerprefseditor": "https://github.com/Dysman/bgTools-playerPrefsEditor.git#upm",
     "com.unity.ai.navigation": "2.0.8",
     "com.unity.cinemachine": "3.1.6",
     "com.unity.collab-proxy": "2.12.4",

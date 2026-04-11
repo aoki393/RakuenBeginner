@@ -11,6 +11,7 @@ namespace PLAYERTWO.PlatformerProject
         public UnityEvent OnDashStarted;
         public UnityEvent OnDashEnded;
         public UnityEvent OnHurt;
+        public UnityEvent OnLevelComplete;
 
     }
 }

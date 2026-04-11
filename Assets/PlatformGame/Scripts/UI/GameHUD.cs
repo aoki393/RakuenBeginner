@@ -1,7 +1,11 @@
 // InGameUI.cs
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
+/// <summary>
+/// 按理说数据不应该写在UI面板里，但目前数据少就直接写这了……
+/// </summary>
 public class GameHUD : MonoBehaviour
 {
     [Header("UI Text 组件")]
@@ -10,20 +14,17 @@ public class GameHUD : MonoBehaviour
 
     private int currentStar;
     private int currentCoin;
-    private int currentLevelIndex;
+    public int CurrentLevelIndex{ get; private set; } // 关卡保存时外部要读取
     private int totalStars;
     private int totalCoins;
-    public LevelDataSO levelDataSO; // 局内Test
+    [SerializeField] private LevelDataSO levelDataSO; // 关卡配置数据，局内测试Test用
     private LevelConfig currentLevelConfig; 
 
     private void Start()
     {
-        // currentLevelIndex = GetCurrentLevelIndex();
-        // currentLevelConfig = GetCurrentLevelConfig();
+        CurrentLevelIndex = GetCurrentLevelIndex();
+        currentLevelConfig = GetCurrentLevelConfig();
 
-        // 局内Test
-        currentLevelIndex = 1;
-        currentLevelConfig = levelDataSO.levels[currentLevelIndex];
         currentStar = 0;
         currentCoin = 0;
 
@@ -75,36 +76,40 @@ public class GameHUD : MonoBehaviour
             coinNumText.text = currentCoin.ToString() +" / " + totalCoins.ToString();  
     }
 
-    // ========== 通关逻辑 ==========
-
-    /// <summary>
-    /// 通关时调用，保存数据
-    /// </summary>
-    public void OnLevelComplete()
-    {
-        LevelDataManager.Instance.SaveLevelResult(currentLevelIndex, currentStar, currentCoin);
-    }
+    
 
     // ========== 辅助方法 ==========
 
-    /// <summary>
-    /// 获取当前收集到的星星数
-    /// </summary>
     public int GetCurrentStar() => currentStar;
 
-    /// <summary>
-    /// 获取当前收集到的金币数
-    /// </summary>
     public int GetCurrentCoin() => currentCoin;
 
+    /// <summary>
+    /// 获取当前关卡索引，从场景名中解析（要求场景命名与SO配置中对应，格式：Level 01）
+    /// </summary>
     private int GetCurrentLevelIndex()
     {
-        return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        string sceneName = SceneManager.GetActiveScene().name;
+        string[] parts = sceneName.Split(' ');
+        
+        if (!int.TryParse(parts[1], out int levelIndex))
+        {
+            Debug.LogError($"关卡数字解析失败：'{parts[1]}' 不是有效的数字（场景名：'{sceneName}'）");
+            return -1;
+        }
+        
+        return levelIndex;
     }
 
     private LevelConfig GetCurrentLevelConfig()
     {
+        // 场景中没有"__LEVEL_Manager__"的时候说明在进行局内测试，直接用SO配置数据
+        if(GameObject.Find("__LEVEL_Manager__") == null)
+        {
+            return levelDataSO.levels[CurrentLevelIndex];
+        }
+
         var levels = LevelDataManager.Instance.GetAllLevels();
-        return levels.Find(l => l.levelIndex == currentLevelIndex);
+        return levels.Find(l => l.levelIndex == CurrentLevelIndex);
     }
 }

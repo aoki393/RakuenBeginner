@@ -31,6 +31,8 @@ namespace PLAYERTWO.PlatformerProject
         /// </summary>
         public static string Checkpoint = "Volume/Checkpoint";
 
+        public static string LevelCompleteDoor = "Volume/LevelCompleteDoor";
+
 
 
         /// 危险区域或陷阱的标签。

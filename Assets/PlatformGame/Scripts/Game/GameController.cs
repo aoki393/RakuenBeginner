@@ -4,11 +4,13 @@ using UnityEngine.SceneManagement;
 namespace PlatformGame
 {
 	[AddComponentMenu("PLAYER TWO/Platformer Project/Game/Game Controller")]
-	public class GameController : Singleton<GameController>
+    [RequireComponent(typeof(GameInputManager))]
+    public class GameController : Singleton<GameController>
 	{
 		protected GameLoader m_loader => GameLoader.instance;
 		protected GamePauser m_pauser => GamePauser.instance;
 		protected GameInputManager m_inputManager;
+		[SerializeField] private LevelSelectScreen levelSelectScreen;
 
 		// public virtual void AddRetries(int amount) => m_game.retries += amount;
 
@@ -35,6 +37,10 @@ namespace PlatformGame
 				}
 			}
 			
+		}
+		public void OpenLevelSelect()
+		{
+			levelSelectScreen.Show();
 		}
 	}
 }

@@ -1,6 +1,7 @@
 // LevelDataManager.cs
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class LevelDataManager : MonoBehaviour
 {
@@ -39,7 +40,8 @@ public class LevelDataManager : MonoBehaviour
                 {
                     isCompleted = true,
                     starEarned = star,
-                    coinEarned = coin
+                    coinEarned = coin,
+                    completedTime = DateTime.Parse(PlayerPrefs.GetString($"Level_{level.levelIndex}_CompletedTime", "0000-00-00 00:00:00"))
                 };
             }
             else
@@ -55,10 +57,11 @@ public class LevelDataManager : MonoBehaviour
     }
 
     // 保存关卡完成数据
-    public void SaveLevelResult(int levelIndex, int starEarned, int coinEarned)
+    public void SaveLevelResult(int levelIndex, int starEarned, int coinEarned, DateTime completedTime)
     {
         PlayerPrefs.SetInt($"Level_{levelIndex}_Star", starEarned);
         PlayerPrefs.SetInt($"Level_{levelIndex}_Coin", coinEarned);
+        PlayerPrefs.SetString($"Level_{levelIndex}_CompletedTime", completedTime.ToString("yyyy-MM-dd HH:mm:ss"));
         PlayerPrefs.Save();
 
         if (levelRecords.ContainsKey(levelIndex))
@@ -67,7 +70,8 @@ public class LevelDataManager : MonoBehaviour
             {
                 isCompleted = true,
                 starEarned = starEarned,
-                coinEarned = coinEarned
+                coinEarned = coinEarned,
+                completedTime = completedTime
             };
         }
         else
@@ -76,7 +80,8 @@ public class LevelDataManager : MonoBehaviour
             {
                 isCompleted = true,
                 starEarned = starEarned,
-                coinEarned = coinEarned
+                coinEarned = coinEarned,
+                completedTime = completedTime
             });
         }
     }
@@ -86,7 +91,7 @@ public class LevelDataManager : MonoBehaviour
     {
         if (levelRecords.ContainsKey(levelIndex))
             return levelRecords[levelIndex];
-        return new LevelRecord { isCompleted = false, starEarned = 0, coinEarned = 0 };
+        return new LevelRecord { isCompleted = false, starEarned = 0, coinEarned = 0, completedTime = DateTime.MinValue };
     }
 
     // 获取所有关卡配置
@@ -102,4 +107,5 @@ public class LevelRecord
     public bool isCompleted;
     public int starEarned;
     public int coinEarned;
+    public DateTime completedTime;
 }
