@@ -16,14 +16,24 @@ public class LevelSelectScreen : MonoBehaviour
 
     private List<LevelCard> levelCards = new List<LevelCard>();
 
-    private void Start()
+    private void OnEnable() // 只要界面显示就要初始化一次
     {
-        InitializeLevelSelectUI();
+        // Debug.Log("LevelSelectScreen: OnEnable");
+        InitializeLevelSelectUI(); // 初始化UI
     }
 
     private void InitializeLevelSelectUI()
     {
         var allLevels = LevelDataManager.Instance.GetAllLevels();
+
+        // 清空之前生成的所有卡片子物体
+        for (int i = 0; i < cardsContainer.childCount; i++)
+        {
+            Transform child = cardsContainer.GetChild(i);
+            // Debug.Log($"删除: {child.name}, 当前i={i}, childCount={cardsContainer.childCount}");
+            Destroy(child.gameObject);
+        }
+        levelCards.Clear();
 
         foreach (var level in allLevels)
         {
@@ -49,10 +59,11 @@ public class LevelSelectScreen : MonoBehaviour
     
     public void Show()
     {
+        // Debug.Log("LevelSelectScreen: Show");
         gameObject.SetActive(true);
     }
 
-    public void Hide()
+    public void Hide() // 直接在按钮Inspector的OnClick里拖这个
     {
         gameObject.SetActive(false);
     }

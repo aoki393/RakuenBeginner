@@ -61,7 +61,6 @@ public class LevelCard : MonoBehaviour
         }
         else
         {
-            // 未完成：显示“暂未完成”图片
             if (starText != null) starText.text = $"0 / {currentLevelConfig.totalStar}";
             if (coinText != null) coinText.text = $"0 / {currentLevelConfig.totalCoin}"; 
             

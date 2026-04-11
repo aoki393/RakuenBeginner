@@ -258,6 +258,9 @@ namespace PLAYERTWO.PlatformerProject
 			{
 				// 玩家自身胜利动作播放之类的，数据保存和UI显示在LevelCompleteDoor上执行这里不用处理
 				playerEvents.OnLevelComplete?.Invoke(); 
+				States.Change<IdlePlayerState>();
+				Inputs.enabled=false; // 禁用输入
+				
 			}
 		}
 		void OnTriggerExit(Collider other)

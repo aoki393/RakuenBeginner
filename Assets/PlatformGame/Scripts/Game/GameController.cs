@@ -10,8 +10,6 @@ namespace PlatformGame
 		protected GameLoader m_loader => GameLoader.instance;
 		protected GamePauser m_pauser => GamePauser.instance;
 		protected GameInputManager m_inputManager;
-		[SerializeField] private LevelSelectScreen levelSelectScreen;
-
 		// public virtual void AddRetries(int amount) => m_game.retries += amount;
 
 		public virtual void LoadScene(string scene) => m_loader.Load(scene);  // 开放给StartButton
@@ -37,10 +35,6 @@ namespace PlatformGame
 				}
 			}
 			
-		}
-		public void OpenLevelSelect()
-		{
-			levelSelectScreen.Show();
 		}
 	}
 }

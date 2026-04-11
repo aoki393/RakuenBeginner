@@ -22,7 +22,14 @@ public class LevelCompleteDoor : MonoBehaviour
     /// </summary>
     public void OnLevelComplete()
     {
-        LevelDataManager.Instance.SaveLevelResult(gameHUD.CurrentLevelIndex, gameHUD.GetCurrentStar(), gameHUD.GetCurrentCoin(), DateTime.Now); // 保存数据
+        if(GameObject.Find("__LEVEL_Manager__") != null)
+        {
+            LevelDataManager.Instance.SaveLevelResult(gameHUD.CurrentLevelIndex, gameHUD.GetCurrentStar(), gameHUD.GetCurrentCoin(), DateTime.Now); // 保存数据
+            Debug.Log("LevelCompleteDoor: 保存数据成功");
+        }
+        // "__LEVEL_Manager__"
+            
+
         gameFinishScreen.Show(); // 显示通关界面
     }
 }

@@ -52,18 +52,7 @@ namespace PLAYERTWO.PlatformerProject
 			m_movement = actions["Movement"];
 			m_run = actions["Run"];
 			m_jump = actions["Jump"];
-			// m_dive = actions["Dive"];
-			// m_spin = actions["Spin"];
-			// m_pickAndDrop = actions["PickAndDrop"];
-			// m_crouch = actions["Crouch"];
-			// m_airDive = actions["AirDive"];
-			// m_stomp = actions["Stomp"];
-			// m_releaseLedge = actions["ReleaseLedge"];
-			// m_pause = actions["Pause"];
 			m_look = actions["Look"];
-			// m_glide = actions["Glide"];
-			// m_dash = actions["Dash"];
-			// m_grindBrake = actions["Grind Brake"];
 			m_cameraStop = actions["StopCameraOrbit"];
 		}
 
