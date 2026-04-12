@@ -30,6 +30,10 @@ namespace PLAYERTWO.PlatformerProject
         [Header("Smoothing")]
         public float rotationSmoothing = 0.1f;     // 旋转平滑度（0 = 瞬间，越大越平滑）
 
+        [Range(0.2f, 1)]
+        [SerializeField] private float mouseSensitivity = 0.8f;
+        [Range(0.2f, 1)]
+        [SerializeField] private float gamepadSensitivity = 1f;
         private CinemachineCamera m_camera;
 
         void Start()
@@ -41,7 +45,6 @@ namespace PLAYERTWO.PlatformerProject
 		{
 			if (!player)
 			{
-				// 如果没有指定 player，则在场景中自动寻找
 				player = FindFirstObjectByType<Player>();
 			}
             m_camera = GetComponent<CinemachineCamera>();
@@ -63,6 +66,8 @@ namespace PLAYERTWO.PlatformerProject
 		{
 			m_cameraTargetPitch = initialAngle; // 设定初始俯仰角
 			m_cameraTargetYaw = player.transform.rotation.eulerAngles.y; // 根据玩家朝向设定相机水平角
+
+            Debug.Log($"PlayerCamera: Reset to initial angle: {initialAngle}, yaw: {m_cameraTargetYaw}");
 
 			MoveTarget();
 			// m_brain.ManualUpdate(); // 强制刷新相机
@@ -93,9 +98,11 @@ namespace PLAYERTWO.PlatformerProject
 					var usingMouse = player.Inputs.IsLookingWithMouse();
 					float deltaTimeMultiplier = usingMouse ? Time.timeScale : Time.deltaTime;
 
+                    float sensitivity = usingMouse ? mouseSensitivity : gamepadSensitivity;
+
 					// 修改相机角度
-					m_cameraTargetYaw += direction.x * deltaTimeMultiplier;
-					m_cameraTargetPitch -= direction.z * deltaTimeMultiplier;
+					m_cameraTargetYaw += direction.x * deltaTimeMultiplier * sensitivity;
+					m_cameraTargetPitch -= direction.z * deltaTimeMultiplier * sensitivity;
 					m_cameraTargetPitch = ClampAngle(m_cameraTargetPitch, verticalMinRotation, verticalMaxRotation);
 				}
 			}

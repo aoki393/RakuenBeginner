@@ -35,6 +35,7 @@ public class GameFinishScreen : MonoBehaviour
 
     public void Show()
     {
+        LevelStartPanel.SetCursorVisible(true);
         gameObject.SetActive(true);
     }
 }

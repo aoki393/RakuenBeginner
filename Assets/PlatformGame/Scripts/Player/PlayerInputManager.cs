@@ -49,6 +49,8 @@ namespace PLAYERTWO.PlatformerProject
 		/// </summary>
 		protected virtual void CacheActions()
 		{
+			Debug.Log("PlayerInputManager CacheActions");
+
 			m_movement = actions["Movement"];
 			m_run = actions["Run"];
 			m_jump = actions["Jump"];
@@ -177,7 +179,6 @@ namespace PLAYERTWO.PlatformerProject
 		protected virtual void Start()
 		{
 			m_camera = Camera.main;
-			actions.Enable();
 		}
 
 		protected virtual void Update()
@@ -189,7 +190,7 @@ namespace PLAYERTWO.PlatformerProject
 			}
 		}
 
-		protected virtual void OnEnable() => actions?.Enable();
-		protected virtual void OnDisable() => actions?.Disable();
-	}
+        // protected virtual void OnEnable() => actions?.Enable();
+        // protected virtual void OnDisable() => actions?.Disable();
+    }
 }

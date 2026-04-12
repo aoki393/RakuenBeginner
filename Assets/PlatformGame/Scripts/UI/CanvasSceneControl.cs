@@ -10,6 +10,12 @@ namespace PlatformGame
     {
         public GameObject mainMenuCanvas;
         public GameObject gameCanvas;
+        
+        void Awake()
+        {
+            // 挂在UI Root上，让其跨场景存在
+            DontDestroyOnLoad(gameObject);
+        }
 
         private void Start()
         {
@@ -37,9 +43,9 @@ namespace PlatformGame
             }
         }
 
-        private void OnDestroy()
-        {
-            GameLoader.instance.OnLoadFinish.RemoveListener(OnLoadFinish);
-        }
+        // private void OnDestroy() // UI Root只在游戏程序终止时销毁，因此无需手动移除监听
+        // {
+        //     GameLoader.instance.OnLoadFinish.RemoveListener(OnLoadFinish); // GameLoader先销毁会导致这里报错
+        // }
     }
 }

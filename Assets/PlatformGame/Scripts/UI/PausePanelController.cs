@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 namespace PlatformGame
 {
@@ -48,8 +49,9 @@ namespace PlatformGame
         }
         void OnRestartClicked()
         {
-            // TODO：重新加载当前场景
-            // SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+            // Hide();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            GamePauser.instance.TogglePause(); // 😅
             Debug.Log("TODO: 重新开始当前关卡");
         }
         void OnMenuClicked()
@@ -67,14 +69,15 @@ namespace PlatformGame
         private void Show() => uiAnimator.Show(); 
 
         private void Hide()=>uiAnimator.Hide(); 
-        
-        private void OnDestroy()
-        {
-            GamePauser.instance.OnPauseEvent.RemoveListener(OnPause);
-            btnresume.onClick.RemoveListener(OnResumeClicked);
-            btnrestart.onClick.RemoveListener(OnRestartClicked);    
-            btnmenu.onClick.RemoveListener(OnMenuClicked);
-            btnquit.onClick.RemoveListener(OnQuitClicked);            
-        }
+
+        // 暂停面板控制器在游戏程序终止时才销毁，因此无需手动移除监听
+        // private void OnDestroy()
+        // {
+        //     // GamePauser.instance.OnPauseEvent.RemoveListener(OnPause); // GamePauser先销毁会导致这里报错
+        //     btnresume.onClick.RemoveListener(OnResumeClicked);
+        //     btnrestart.onClick.RemoveListener(OnRestartClicked);    
+        //     btnmenu.onClick.RemoveListener(OnMenuClicked);
+        //     btnquit.onClick.RemoveListener(OnQuitClicked);            
+        // }
     }
 }

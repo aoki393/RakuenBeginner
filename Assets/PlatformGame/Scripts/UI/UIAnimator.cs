@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace PlatformGame
 {
@@ -45,6 +46,7 @@ namespace PlatformGame
         /// </summary>
         public virtual void Hide()
         {
+            EventSystem.current.SetSelectedGameObject(null); // 用来修复暂停面板按Resume之后再打开时Resume按钮是被选中状态的问题
             m_animator.SetTrigger(hideTrigger); // 设置 Animator 触发器
             OnHide?.Invoke();                   // 调用隐藏事件（如果有绑定）
         }
