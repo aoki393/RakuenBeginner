@@ -4,17 +4,21 @@ using UnityEngine.UI;
 using PlatformGame;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(UIAnimator))]
 public class GameFinishScreen : MonoBehaviour
 {
     [SerializeField] private Button restartButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private Button menuButton;
+    [SerializeField] private UIAnimator uiAnimator;
 
     void Start()
     {
         restartButton.onClick.AddListener(OnRestartButtonClick);
         exitButton.onClick.AddListener(OnExitButtonClick);
         menuButton.onClick.AddListener(OnMenuButtonClick);
+
+        uiAnimator=GetComponent<UIAnimator>();
     }
 
     private void OnMenuButtonClick()
@@ -25,7 +29,7 @@ public class GameFinishScreen : MonoBehaviour
 
     private void OnExitButtonClick()
     {
-        
+        Application.Quit();
     }
 
     private void OnRestartButtonClick()
@@ -33,9 +37,5 @@ public class GameFinishScreen : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void Show()
-    {
-        LevelStartPanel.SetCursorVisible(true);
-        gameObject.SetActive(true);
-    }
+    public void Show()=>uiAnimator.Show();
 }

@@ -6,13 +6,14 @@ namespace PlatformGame
     /// <summary>
     /// 控制进入场景时对应的Canvas显示和隐藏
     /// </summary>
-    public class CanvasSceneControl : MonoBehaviour
+    public class CanvasSceneControl : Singleton<CanvasSceneControl>
     {
         public GameObject mainMenuCanvas;
         public GameObject gameCanvas;
         
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             // 挂在UI Root上，让其跨场景存在
             DontDestroyOnLoad(gameObject);
         }

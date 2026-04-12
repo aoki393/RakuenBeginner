@@ -36,5 +36,17 @@ namespace PlatformGame
 			}
 			
 		}
+
+		/// <summary>
+		/// 锁定鼠标光标，菜单呼出时才能看见鼠标
+		/// </summary>
+		/// <param name="value"></param>
+		public static void SetCursorVisible(bool value )
+		{
+	#if UNITY_STANDALONE || UNITY_WEBGL
+			Cursor.visible = value;
+			// Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
+	#endif
+		}
 	}
 }

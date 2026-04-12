@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PLAYERTWO.PlatformerProject;
+using PlatformGame;
 using System.Collections;
 
 public class LevelStartPanel : MonoBehaviour
@@ -27,20 +28,10 @@ public class LevelStartPanel : MonoBehaviour
 
         player.Inputs.actions.Enable();
 
-        SetCursorVisible(false);
+        GameController.SetCursorVisible(false);
     }
 
-    /// <summary>
-    /// 锁定鼠标光标，菜单呼出时才能看见鼠标
-    /// </summary>
-    /// <param name="value"></param>
-    public static void SetCursorVisible(bool value )
-	{
-#if UNITY_STANDALONE || UNITY_WEBGL
-		Cursor.visible = value;
-		// Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
-#endif
-	}
+    
     protected virtual IEnumerator Routine()
     {
         yield return null; // 等待一帧

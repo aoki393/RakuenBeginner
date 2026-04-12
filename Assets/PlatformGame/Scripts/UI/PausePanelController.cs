@@ -68,7 +68,10 @@ namespace PlatformGame
 
         private void Show() => uiAnimator.Show(); 
 
-        private void Hide()=>uiAnimator.Hide(); 
+        private void Hide(){
+            uiAnimator.Hide(); 
+            GameController.SetCursorVisible(false);
+        }
 
         // 暂停面板控制器在游戏程序终止时才销毁，因此无需手动移除监听
         // private void OnDestroy()

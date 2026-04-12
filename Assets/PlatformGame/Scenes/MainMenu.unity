@@ -4002,7 +4002,7 @@ GameObject:
   - component: {fileID: 1102095383}
   - component: {fileID: 1102095382}
   m_Layer: 5
-  m_Name: TitleText (TMP)
+  m_Name: TitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7560,6 +7560,8 @@ GameObject:
   - component: {fileID: 1852378021}
   - component: {fileID: 1852378020}
   - component: {fileID: 1852378019}
+  - component: {fileID: 1852378023}
+  - component: {fileID: 1852378022}
   m_Layer: 5
   m_Name: LevelSelect Screen
   m_TagString: Untagged
@@ -7604,6 +7606,7 @@ MonoBehaviour:
   closeButton: {fileID: 174758905}
   levelCardPrefab: {fileID: 6316849016905031978, guid: 30f50480589a7a64ea40add1ffb96beb, type: 3}
   cardsContainer: {fileID: 1595944513}
+  uiAnimator: {fileID: 1852378022}
 --- !u!114 &1852378020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7642,6 +7645,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852378017}
   m_CullTransparentMesh: 1
+--- !u!114 &1852378022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852378017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72a57851f8ccbc7489082a6062c0d59f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnShow:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHide:
+    m_PersistentCalls:
+      m_Calls: []
+  normalTrigger: Normal
+  showTrigger: Show
+  hideTrigger: Hide
+--- !u!95 &1852378023
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852378017}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3d8cff8264883c54a8524c4bfb996269, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1875089769
 GameObject:
   m_ObjectHideFlags: 0

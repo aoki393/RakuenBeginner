@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using PlatformGame;
 
+[RequireComponent(typeof(UIAnimator))]
 public class LevelSelectScreen : MonoBehaviour
 {
     public Button closeButton;
@@ -9,12 +11,18 @@ public class LevelSelectScreen : MonoBehaviour
     [Header("卡片预制体和容器")]
     [SerializeField] private GameObject levelCardPrefab;
     [SerializeField] private Transform cardsContainer;
+    [SerializeField] private UIAnimator uiAnimator;
 
     [Header("卡片上的UI组件引用（需绑定到预制体）")]
     // 这些是预制体上组件的类型，实际绑定时需要拖拽
     // 也可以用Find或GetComponentInChildren，但为了性能建议拖拽
 
     private List<LevelCard> levelCards = new List<LevelCard>();
+
+    void Start()
+    {
+        uiAnimator=GetComponent<UIAnimator>();
+    }
 
     private void OnEnable() // 只要界面显示就要初始化一次
     {
@@ -57,14 +65,8 @@ public class LevelSelectScreen : MonoBehaviour
         }
     }
     
-    public void Show()
-    {
-        // Debug.Log("LevelSelectScreen: Show");
-        gameObject.SetActive(true);
-    }
+    public void Show()=>uiAnimator.Show();
 
-    public void Hide() // 直接在按钮Inspector的OnClick里拖这个
-    {
-        gameObject.SetActive(false);
-    }
+    // public void Hide()=>uiAnimator.Hide();
+    public void Hide()=>gameObject.SetActive(false);
 }
