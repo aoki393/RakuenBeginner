@@ -10,17 +10,10 @@ namespace PLAYERTWO.PlatformerProject
 
         protected override void OnStep(Player player)
         {
-            // 重力、贴地、跳跃、下落、旋转、拾取/投掷、冲刺、坡面处理
-            // ToDO: 这些功能的具体实现需要在 Player 类中定义对应的方法，这里只是调用示例
             player.Gravity();
             // player.SnapToGround();
             player.Jump(); // 施加起跳后是切换到Fall状态
             player.Fall(); // 非跳跃切换到Fall，比如走到悬崖掉下去
-
-            // player.Spin();
-            // player.PickAndThrow();
-            // player.Dash();
-            // player.RegularSlopeFactor();
 
             var inputDirection = player.Inputs.GetMovementCameraDirection();
 

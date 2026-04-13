@@ -80,10 +80,6 @@ namespace PLAYERTWO.PlatformerProject
 
         void LateUpdate()
         {
-            if(player.Inputs.GetCameraOrbitStop())
-            {
-                return; // 如果停止了相机旋转输入，则跳过旋转处理
-            }
             HandleOrbit(); 
             MoveTarget(); 
         }

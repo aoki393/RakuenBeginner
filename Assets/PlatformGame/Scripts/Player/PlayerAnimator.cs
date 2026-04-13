@@ -14,7 +14,8 @@ namespace PLAYERTWO.PlatformerProject
         public string lateralSpeedName = "Lateral Speed";       // 横向速度
 		public string verticalSpeedName = "Vertical Speed";     // 纵向速度
         public string isRunningName = "Is Running";             // 是否在跑步
-		// public string lateralAnimationSpeedName = "Lateral Animation Speed"; // 横向动画速度
+        public string isMovingName = "Is Moving";               // 是否在移动，用于攀爬时移动
+        public string ClimbTopName = "Climb Top";     // 攀爬到顶
         void Awake()
         {
             player = GetComponentInParent<Player>();
@@ -46,20 +47,14 @@ namespace PLAYERTWO.PlatformerProject
         {
             animator.SetBool(isRunningName, player.IsInputRunning());
         }
-        private void OnJump()
-        {
-            animator.SetFloat(verticalSpeedName, player.verticalVelocity.y);
-        }
+
 
         void LateUpdate()
-        {
-            // 更新 Animator 参数
-            
-            // animator.SetFloat(lateralSpeedName, player.lateralVelocity.magnitude);
+        {            
+            animator.SetFloat(lateralSpeedName, player.lateralVelocity.magnitude);
             animator.SetFloat(verticalSpeedName, player.verticalVelocity.y);
-            // animator.SetBool(isRunningName, player.IsInputRunning());
-
-            // 其他参数根据需要添加
+            animator.SetBool(isMovingName, player.Inputs.GetIsMoving());
+            animator.SetBool(ClimbTopName, player.ClimbTop); 
         }
 
     }

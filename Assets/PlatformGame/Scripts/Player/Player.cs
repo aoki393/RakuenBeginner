@@ -5,14 +5,13 @@ namespace PLAYERTWO.PlatformerProject
     [RequireComponent(typeof(PlayerInputManager))]   // 玩家输入管理器（处理按键、手柄等输入）
 	[RequireComponent(typeof(PlayerStatsManager))]   // 玩家数值管理器（存储移动速度、跳跃力等数值配置）
 	[RequireComponent(typeof(PlayerStateManager))]   // 玩家状态机管理器（Idle、Run、Jump 等状态）
-    [RequireComponent(typeof(Health))]
+    // [RequireComponent(typeof(Health))]
     public class Player : Entity<Player>
     {
-        public int JumpCounter{ get; protected set; }
-
+        // States在Entity里已定义
         public PlayerInputManager Inputs { get; protected set; }
         public PlayerStatsManager Stats { get; protected set; }
-        // States在Entity里已定义
+
 		public PlayerEvents playerEvents;
 		public bool canJumpInAir=true; // 调试用，允许在空中跳跃
 		public bool onWater=false; // 是否在水中
@@ -24,6 +23,18 @@ namespace PLAYERTWO.PlatformerProject
 		// private Health health;
 		public Transform LastCheckpoint;
 		public bool inEnemyIsland=false;
+
+		[Header("Wall Climbing")]
+		public bool enableWallClimbing = true;                    // 总开关
+		public float wallClimbDetectionDistance = 0.4f;          // 检测距离
+		public float wallClimbAngleTolerance = 25f;              // 角度容差（度）
+		public float wallClimbSpeed = 4f;                        // 攀爬速度
+		protected float m_lastWallClimbExitTime = -1f;
+		public float wallClimbExitCooldown = 0.6f;		// 退出后的短暂冷却，防止反复进出
+		public Collider currentClimbableWall { get; set; }
+		public Vector3 currentWallNormal { get; set; }
+		public bool ClimbTop { get; set; } = false;
+
 		
 
         protected override void Awake()
@@ -35,24 +46,6 @@ namespace PLAYERTWO.PlatformerProject
 
 			// health = GetComponent<Health>();
 
-			
-
-            // 监听落地事件，重置跳跃/空中技能次数
-			// entityEvents.OnGroundEnter.AddListener(() =>
-			// {
-				// ResetJumps();
-				// ResetAirSpins();
-				// ResetAirDash();
-			// });
-
-			// 监听进入轨道事件，重置空中技能并进入滑轨状态
-			// entityEvents.OnRailsEnter.AddListener(() =>
-			// {
-				// ResetJumps();
-				// ResetAirSpins();
-				// ResetAirDash();
-				// StartGrind();
-			// });
         }
 		void Start()
 		{
@@ -270,6 +263,78 @@ namespace PLAYERTWO.PlatformerProject
 				inEnemyIsland=false;
 			}
 		}
-        
+
+		protected override void OnUpdate()
+        {
+            base.OnUpdate();
+
+			if(States.Current is not WallClimbingPlayerState)
+			{
+				TryStartWallClimbing();
+			}			
+
+        }
+
+		public bool CanStartWallClimbing
+		{
+			get
+			{
+				if (m_lastWallClimbExitTime < 0) return true;
+				return Time.time - m_lastWallClimbExitTime > wallClimbExitCooldown;
+			}
+		}
+
+		/// <summary>
+		/// 尝试进入墙面攀爬状态（在 Update 或状态机中调用）
+		/// </summary>
+		public virtual void TryStartWallClimbing()
+		{
+			if (!enableWallClimbing) return;			
+			
+			// 条件1：玩家按住了前进键（相对于相机的前方）
+			var moveInput = Inputs.GetMovementCameraDirection();
+			if (moveInput.z <= 0.1f) return;  // 没有向前推
+			
+			// 条件2：检测前方是否有可攀爬的墙面
+			if (!CapsuleCast(transform.forward, wallClimbDetectionDistance, out var hit))
+				return;
+			
+			// 条件3：墙面必须有 Climbable Tag
+			if (!hit.collider.CompareTag("Climbable")) return;
+			
+			// 条件4：墙面角度检查
+			if (Vector3.Angle(hit.normal, Vector3.up) < 90f - wallClimbAngleTolerance) return;
+			
+			// 条件5：玩家面朝方向与墙面朝向对齐
+			var forward = transform.forward;
+			var wallDirection = -hit.normal;  // 指向墙内的方向的反方向 = 指向玩家的方向
+			if (Vector3.Angle(forward, wallDirection) > wallClimbAngleTolerance) return;
+
+			// 附加：退出攀爬后的冷却时间未到
+			if (!CanStartWallClimbing) return; 
+			
+			// 条件通过，进入攀爬状态
+			// 先重置速度
+			velocity = Vector3.zero;
+			
+			// 记录当前攀爬的墙面信息（供状态使用）
+			currentClimbableWall = hit.collider;
+			currentWallNormal = hit.normal;
+			
+			// 切换到攀爬状态
+			States.Change<WallClimbingPlayerState>();
+		}
+
+		public virtual void OnWallClimbingExit()
+		{
+			m_lastWallClimbExitTime = Time.time;
+		}
+
+        // void OnDrawGizmos()
+        // {
+        //     Gizmos.color = Color.red; // 红色表示攀爬检测
+        //     Gizmos.DrawLine(transform.position, transform.position + transform.forward * wallClimbDetectionDistance);
+        // }
+
     }
 }

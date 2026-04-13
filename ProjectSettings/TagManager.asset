@@ -15,6 +15,7 @@ TagManager:
   - Volume/EnemyIsland
   - Volume/Checkpoint
   - Volume/LevelCompleteDoor
+  - Climbable
   layers:
   - Default
   - TransparentFX

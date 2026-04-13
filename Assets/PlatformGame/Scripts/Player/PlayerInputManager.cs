@@ -18,18 +18,9 @@ namespace PLAYERTWO.PlatformerProject
 		protected InputAction m_movement;
 		protected InputAction m_run;
 		protected InputAction m_jump;
-		protected InputAction m_dive;
-		protected InputAction m_spin;
-		protected InputAction m_pickAndDrop;
-		protected InputAction m_crouch;
-		protected InputAction m_airDive;
-		protected InputAction m_stomp;
-		protected InputAction m_releaseLedge;
+		protected InputAction m_releaseClimb;
 		protected InputAction m_look;
-		protected InputAction m_glide;
-		protected InputAction m_dash;
-		protected InputAction m_grindBrake;
-		protected InputAction m_cameraStop;
+		// protected InputAction m_cameraStop;
 
 		// 主摄像机引用，用于计算相对移动方向
 		protected Camera m_camera;
@@ -55,7 +46,8 @@ namespace PLAYERTWO.PlatformerProject
 			m_run = actions["Run"];
 			m_jump = actions["Jump"];
 			m_look = actions["Look"];
-			m_cameraStop = actions["StopCameraOrbit"];
+			// m_cameraStop = actions["StopCameraOrbit"];
+			m_releaseClimb = actions["ReleaseClimb"];
 		}
 
 		/// <summary>
@@ -131,7 +123,8 @@ namespace PLAYERTWO.PlatformerProject
 		public virtual bool GetRun() => m_run.IsPressed();
 		public virtual bool GetRunUp() => m_run.WasReleasedThisFrame();
 
-		public virtual bool GetCameraOrbitStop() => m_cameraStop.IsPressed();
+		// public virtual bool GetCameraOrbitStop() => m_cameraStop.IsPressed();
+		public virtual bool GetIsMoving() => m_movement.IsPressed();
 
 		/// <summary>
 		/// 判断是否触发跳跃（支持跳跃缓冲）
@@ -148,16 +141,7 @@ namespace PLAYERTWO.PlatformerProject
 		}
 
 		public virtual bool GetJumpUp() => m_jump.WasReleasedThisFrame();
-		public virtual bool GetDive() => m_dive.IsPressed();
-		public virtual bool GetSpinDown() => m_spin.WasPressedThisFrame();
-		public virtual bool GetPickAndDropDown() => m_pickAndDrop.WasPressedThisFrame();
-		public virtual bool GetCrouchAndCraw() => m_crouch.IsPressed();
-		public virtual bool GetAirDiveDown() => m_airDive.WasPressedThisFrame();
-		public virtual bool GetStompDown() => m_stomp.WasPressedThisFrame();
-		public virtual bool GetReleaseLedgeDown() => m_releaseLedge.WasPressedThisFrame();
-		public virtual bool GetGlide() => m_glide.IsPressed();
-		public virtual bool GetDashDown() => m_dash.WasPressedThisFrame();
-		public virtual bool GetGrindBrake() => m_grindBrake.IsPressed();
+		public virtual bool GetReleaseClimb() => m_releaseClimb.WasPressedThisFrame();
 
 		/// <summary>
 		/// 将输入值按给定死区重新映射到 0-1

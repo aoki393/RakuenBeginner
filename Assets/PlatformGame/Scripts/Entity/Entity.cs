@@ -321,6 +321,7 @@ namespace PLAYERTWO.PlatformerProject
 		    // 只有当前在地面状态时才执行
 		    if (isGrounded)
 		    {
+				// Debug.Log("Entity: Exiting ground");
 		        // 标记角色不在地面
 		        isGrounded = false;
 		        // 解除与地面的父子关系（如果站在移动平台上，需要解绑）

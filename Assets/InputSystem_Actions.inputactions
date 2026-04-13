@@ -96,7 +96,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "StopCameraOrbit",
+                    "name": "ReleaseClimb",
                     "type": "Button",
                     "id": "fae02958-6ff9-40ee-8068-7fb80da7b44f",
                     "expectedControlType": "",
@@ -518,7 +518,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "StopCameraOrbit",
+                    "action": "ReleaseClimb",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
