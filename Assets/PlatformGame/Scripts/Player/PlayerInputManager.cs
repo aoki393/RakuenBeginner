@@ -40,8 +40,7 @@ namespace PLAYERTWO.PlatformerProject
 		/// </summary>
 		protected virtual void CacheActions()
 		{
-			Debug.Log("PlayerInputManager CacheActions");
-
+			// Debug.Log("PlayerInputManager CacheActions");
 			m_movement = actions["Movement"];
 			m_run = actions["Run"];
 			m_jump = actions["Jump"];

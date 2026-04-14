@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5126933214163791064}
   m_Layer: 0
   m_Name: Coin
-  m_TagString: Untagged
+  m_TagString: Collectable/Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -91,21 +91,8 @@ MonoBehaviour:
   initialVelocity: {x: 0, y: 12, z: 0}
   collisionClip: {fileID: 8300000, guid: 824b7a6e77f1fc042a59d7544ae4cfe2, type: 3}
   onCollect:
-    OnJump:
-      m_PersistentCalls:
-        m_Calls: []
-    OnRun:
-      m_PersistentCalls:
-        m_Calls: []
-    OnDashStarted:
-      m_PersistentCalls:
-        m_Calls: []
-    OnDashEnded:
-      m_PersistentCalls:
-        m_Calls: []
-    OnHurt:
-      m_PersistentCalls:
-        m_Calls: []
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5126933214163791064
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,6 +16,8 @@ TagManager:
   - Volume/Checkpoint
   - Volume/LevelCompleteDoor
   - Climbable
+  - Collectable/Coin
+  - Collectable/Star
   layers:
   - Default
   - TransparentFX

@@ -5,7 +5,7 @@ using PlatformGame;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(UIAnimator))]
-public class GameFinishScreen : MonoBehaviour
+public class GameFinishScreen : MonoBehaviour, ILevelFinishService
 {
     [SerializeField] private Button restartButton;
     [SerializeField] private Button exitButton;
@@ -14,11 +14,16 @@ public class GameFinishScreen : MonoBehaviour
 
     void Start()
     {
+        LevelUIServiceLocator.RegisterLevelFinishService(this);
+        Debug.Log("[GameFinishScreen] 已注册 LevelUI Finish 服务");
+        
         restartButton.onClick.AddListener(OnRestartButtonClick);
         exitButton.onClick.AddListener(OnExitButtonClick);
         menuButton.onClick.AddListener(OnMenuButtonClick);
 
         uiAnimator=GetComponent<UIAnimator>();
+
+        gameObject.SetActive(false);
     }
 
     private void OnMenuButtonClick()
@@ -37,5 +42,10 @@ public class GameFinishScreen : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void Show()=>uiAnimator.Show();
+    private void Show()=>uiAnimator.Show();
+
+    public void ShowFinishScreen() // 接口实现
+    {
+        Show();
+    }
 }

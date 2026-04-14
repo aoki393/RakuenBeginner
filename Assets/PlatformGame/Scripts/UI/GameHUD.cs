@@ -2,25 +2,31 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using PlatformGame;
 
 /// <summary>
 /// 按理说数据不应该写在UI面板里，但目前数据少就直接写这了……
 /// </summary>
-public class GameHUD : MonoBehaviour
+public class GameHUD : MonoBehaviour, ILevelHUDService
 {
     [Header("UI Text 组件")]
     [SerializeField] private TextMeshProUGUI starNumText;
     [SerializeField] private TextMeshProUGUI coinNumText;
-
-    private int currentStar;
-    private int currentCoin;
     public int CurrentLevelIndex{ get; private set; } // 关卡保存时外部要读取
+    private int currentStar;
+    private int currentCoin;    
     private int totalStars;
     private int totalCoins;
     [SerializeField] private LevelDataSO levelDataSO; // 关卡配置数据，局内测试Test用
     private LevelConfig currentLevelConfig; 
 
     private void Start()
+    {
+        InitializeLevelData();
+        TryRegisterAsService();
+    }
+
+    private void InitializeLevelData()
     {
         CurrentLevelIndex = GetCurrentLevelIndex();
         currentLevelConfig = GetCurrentLevelConfig();
@@ -34,9 +40,37 @@ public class GameHUD : MonoBehaviour
         UpdateStarUI();
         UpdateCoinUI();
     }
+    private void TryRegisterAsService()
+    {
+        LevelUIServiceLocator.RegisterHUDService(this);
+        Debug.Log("[GameHUD] 已注册 LevelUI HUD 服务");
+        // bool isFormalGame = GameObject.Find("__GAME_Control__") != null;
+        
+        // if (isFormalGame)
+        // {
+        //     // 正式游戏：可能有全局 UI 服务，这个测试用 GameHUD 不应该注册
+        //     if (!LevelUIServiceLocator.HasService)
+        //     {
+        //         // 理论上不应该发生，全局服务应该在 Awake 时注册了
+        //         Debug.LogWarning("[GameHUD] 正式游戏但无全局服务，临时注册自己");
+        //         LevelUIServiceLocator.Register(this);
+        //     }
+        //     else
+        //     {
+        //         // 已有全局服务，禁用自己
+        //         Debug.Log("[GameHUD] 正式游戏模式，禁用测试用 HUD");
+        //         gameObject.SetActive(false);
+        //     }
+        // }
+        // else
+        // {
+        //     // 测试模式：没有 __GAME_Control__，注册自己
+        //     LevelUIServiceLocator.Register(this);
+        //     Debug.Log("[GameHUD] 测试模式，已注册为 UI 服务");
+        // }
+    }
+    // ========== 实现 ILevelUIService 接口 ==========
 
-    // ========== 核心方法：收集时调用 ==========
-    
     /// <summary>
     /// 增加星星（收集星星时调用）
     /// </summary>
@@ -54,6 +88,22 @@ public class GameHUD : MonoBehaviour
         currentCoin += amount;        
         UpdateCoinUI();
     }
+    
+    public int GetCurrentStar() => currentStar;
+    
+    public int GetCurrentCoin() => currentCoin;
+    
+    public int GetTotalStars() => totalStars;
+    
+    public int GetTotalCoins() => totalCoins;
+    
+    public void ShowFinishScreen()
+    {
+        // GameHUD 不负责显示通关界面，这个方法留空
+        // 实际由 GameFinishScreen 实现
+        Debug.LogWarning("[GameHUD] ShowFinishScreen 应由 GameFinishScreen 实现");
+    }
+
 
 
     // ========== UI 更新方法 ==========
@@ -80,10 +130,6 @@ public class GameHUD : MonoBehaviour
 
     // ========== 辅助方法 ==========
 
-    public int GetCurrentStar() => currentStar;
-
-    public int GetCurrentCoin() => currentCoin;
-
     /// <summary>
     /// 获取当前关卡索引，从场景名中解析（要求场景命名与SO配置中对应，格式：Level 01）
     /// </summary>
@@ -106,7 +152,11 @@ public class GameHUD : MonoBehaviour
         // 场景中没有"__LEVEL_Manager__"的时候说明在进行局内测试，直接用SO配置数据
         if(GameObject.Find("__LEVEL_Manager__") == null)
         {
-            return levelDataSO.levels[CurrentLevelIndex];
+            if (levelDataSO != null && CurrentLevelIndex < levelDataSO.levels.Count)
+                return levelDataSO.levels[CurrentLevelIndex];
+            
+            Debug.LogError("[GameHUD] 无法获取测试用关卡配置");
+            return null;
         }
 
         var levels = LevelDataManager.Instance.GetAllLevels();

@@ -256,7 +256,7 @@ namespace PLAYERTWO.PlatformerProject
 		{
 			InitializeAudio();
 			InitializeCollider();
-			InitializeTransform();
+			// InitializeTransform();
 			InitializeDisplay();
 			InitializeVelocity();
 		}
@@ -277,7 +277,7 @@ namespace PLAYERTWO.PlatformerProject
 		}
 
 		// 触发器检测：如果设置了 collectOnContact，玩家碰到就收集
-		protected virtual void OnTriggerStay(Collider other)
+		protected virtual void OnTriggerEnter(Collider other)
 		{
 			if (collectOnContact && other.CompareTag(GameTags.Player))
 			{

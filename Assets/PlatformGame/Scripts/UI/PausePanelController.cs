@@ -4,12 +4,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 
 namespace PlatformGame
-{
-    // [RequireComponent(typeof(UIAnimator))]
+{   
     /// <summary>
     /// 暂停面板控制器  
     /// 负责暂停游戏时显示和隐藏暂停面板。
     /// </summary>
+    [RequireComponent(typeof(UIAnimator))]
     public class PausePanelController : MonoBehaviour
     {
         // public GamePauser gamePauser=GamePauser.instance; // 响应游戏暂停事件，同时也调用游戏暂停方法
@@ -33,6 +33,7 @@ namespace PlatformGame
         }
 
         private void OnPause(bool isPaused){
+            Debug.Log($"OnPause: {isPaused}");
             if(isPaused)
             {
                 Show(); // 显示暂停面板

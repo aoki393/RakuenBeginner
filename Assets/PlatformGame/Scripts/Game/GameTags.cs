@@ -32,6 +32,8 @@ namespace PLAYERTWO.PlatformerProject
         public static string Checkpoint = "Volume/Checkpoint";
 
         public static string LevelCompleteDoor = "Volume/LevelCompleteDoor";
+        public static string Star = "Collectable/Star";
+        public static string Coin = "Collectable/Coin";
 
 
 

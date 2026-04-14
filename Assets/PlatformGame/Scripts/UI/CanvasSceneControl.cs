@@ -26,6 +26,10 @@ namespace PlatformGame
             }
 
             GameLoader.instance.OnLoadFinish.AddListener(OnLoadFinish);
+
+            // gameCanvas.SetActive(true);
+
+            // LevelUIInit();
         }
 
         private void OnLoadFinish()
@@ -41,7 +45,26 @@ namespace PlatformGame
             {
                 mainMenuCanvas.SetActive(false);
                 gameCanvas.SetActive(true);
+                // 初始化其下的面板
+                LevelUIInit();
             }
+        }
+
+
+        private void LevelUIInit()
+        {
+            // gameCanvas.SetActive(true);
+
+            PausePanelController pausePanelController = gameCanvas.GetComponentInChildren<PausePanelController>(true);
+            pausePanelController.gameObject.SetActive(true); // 先激活使事件订阅生效，在面板里再隐藏
+
+            GameHUD gameHUD = gameCanvas.GetComponentInChildren<GameHUD>(true);
+            gameHUD.gameObject.SetActive(true); // 先激活使UI服务注册，在面板里再隐藏
+
+            GameFinishScreen gameFinishScreen = gameCanvas.GetComponentInChildren<GameFinishScreen>(true);
+            gameFinishScreen.gameObject.SetActive(true); // 先激活使UI服务注册，在面板里再隐藏
+
+            // gameCanvas.SetActive(false);
         }
 
         // private void OnDestroy() // UI Root只在游戏程序终止时销毁，因此无需手动移除监听

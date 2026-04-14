@@ -4906,7 +4906,7 @@ GameObject:
   - component: {fileID: 4202276293619527617}
   m_Layer: 0
   m_Name: Star
-  m_TagString: Untagged
+  m_TagString: Collectable/Star
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
