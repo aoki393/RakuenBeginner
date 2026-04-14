@@ -9,6 +9,11 @@ public class LevelStartPanel : MonoBehaviour
 {
     public Button startButton;
     public Player player;
+    void Awake()
+    {
+        Debug.Log("LevelStartPanel Awake");
+        gameObject.SetActive(true); // 关卡开始时显示面板
+    }
     void Start()
     {
         if(player == null){
