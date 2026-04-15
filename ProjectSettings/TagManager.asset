@@ -18,6 +18,7 @@ TagManager:
   - Climbable
   - Collectable/Coin
   - Collectable/Star
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX
