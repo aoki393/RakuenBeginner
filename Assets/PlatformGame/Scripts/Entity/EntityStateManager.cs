@@ -132,6 +132,10 @@ namespace PLAYERTWO.PlatformerProject
 			{
 				Change(m_states[type]);
 			}
+			else
+			{
+				Debug.LogWarning($"EntityStateManager: No state of type {type} found.");
+			}
 		}
 
 		/// <summary>

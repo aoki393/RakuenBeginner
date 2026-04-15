@@ -20,6 +20,7 @@ namespace PLAYERTWO.PlatformerProject
 		protected InputAction m_jump;
 		protected InputAction m_releaseClimb;
 		protected InputAction m_look;
+		protected InputAction m_glide;
 		// protected InputAction m_cameraStop;
 
 		// 主摄像机引用，用于计算相对移动方向
@@ -47,6 +48,7 @@ namespace PLAYERTWO.PlatformerProject
 			m_look = actions["Look"];
 			// m_cameraStop = actions["StopCameraOrbit"];
 			m_releaseClimb = actions["ReleaseClimb"];
+			m_glide = actions["Glide"];
 		}
 
 		/// <summary>
@@ -141,6 +143,7 @@ namespace PLAYERTWO.PlatformerProject
 
 		public virtual bool GetJumpUp() => m_jump.WasReleasedThisFrame();
 		public virtual bool GetReleaseClimb() => m_releaseClimb.WasPressedThisFrame();
+		public virtual bool GetGlide() => m_glide.IsPressed();
 
 		/// <summary>
 		/// 将输入值按给定死区重新映射到 0-1

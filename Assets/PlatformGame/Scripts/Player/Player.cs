@@ -330,6 +330,19 @@ namespace PLAYERTWO.PlatformerProject
 			m_lastWallClimbExitTime = Time.time;
 		}
 
+		/// <summary>
+		/// 滑翔（下落时减缓下落速度）
+		/// </summary>
+		public virtual void Glide()
+		{
+			if (!isGrounded && Inputs.GetGlide() &&
+				verticalVelocity.y <= 0 && Stats.current.canGlide)
+			{
+				States.Change<GlidingPlayerState>();
+			}
+				
+		}
+
         // void OnDrawGizmos()
         // {
         //     Gizmos.color = Color.red; // 红色表示攀爬检测

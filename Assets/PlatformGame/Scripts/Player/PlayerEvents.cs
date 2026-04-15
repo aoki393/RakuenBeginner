@@ -7,12 +7,20 @@ namespace PLAYERTWO.PlatformerProject
     public class PlayerEvents
     {
         public UnityEvent OnJump;
+        
         public UnityEvent OnRun;
+        
         public UnityEvent OnDashStarted;
         public UnityEvent OnDashEnded;
+        
         public UnityEvent OnHurt;
+        
         public UnityEvent OnLevelComplete;
+        
         public UnityEvent OnClimbTop;
+
+        public UnityEvent OnGlidingStart;
+        public UnityEvent OnGlidingStop;
 
     }
 }

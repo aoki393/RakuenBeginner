@@ -13,6 +13,7 @@ namespace PLAYERTWO.PlatformerProject
             // player.SnapToGround();          // 保持贴地
             player.Jump();                  // 空中允许跳跃
             player.AccelerateToInputDirection(); // 空中根据输入方向加速
+            player.Glide();                  // 空中允许滑翔
 
             if (player.isGrounded)
             {
