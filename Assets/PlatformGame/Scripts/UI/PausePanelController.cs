@@ -29,7 +29,8 @@ namespace PlatformGame
             btnmenu.onClick.AddListener(OnMenuClicked);
             btnquit.onClick.AddListener(OnQuitClicked);   
 
-            gameObject.SetActive(false); // 初始状态隐藏面板，等待游戏暂停时显示         
+            gameObject.SetActive(false); // 初始状态隐藏面板，等待游戏暂停时显示  
+            Debug.Log("[PausePanelController] Start 初始状态设置完成");       
         }
 
         private void OnPause(bool isPaused){

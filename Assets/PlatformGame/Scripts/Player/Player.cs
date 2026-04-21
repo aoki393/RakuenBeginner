@@ -44,6 +44,9 @@ namespace PLAYERTWO.PlatformerProject
             Stats = GetComponent<PlayerStatsManager>();
             InitializeStateManager();
 
+			Inputs.actions.Disable(); // 初始禁用输入，通过关卡的LevelStartPanel按钮启用
+			Debug.Log("Player Awake");
+
 			// health = GetComponent<Health>();
 
         }

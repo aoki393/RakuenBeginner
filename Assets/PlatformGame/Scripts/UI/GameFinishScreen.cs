@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using PlatformGame;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(UIAnimator))]
 public class GameFinishScreen : MonoBehaviour, ILevelFinishService
@@ -11,6 +12,7 @@ public class GameFinishScreen : MonoBehaviour, ILevelFinishService
     [SerializeField] private Button exitButton;
     [SerializeField] private Button menuButton;
     [SerializeField] private UIAnimator uiAnimator;
+    public UnityEvent OnLevelRetryEvent;
 
     void Start()
     {
@@ -24,12 +26,15 @@ public class GameFinishScreen : MonoBehaviour, ILevelFinishService
         uiAnimator=GetComponent<UIAnimator>();
 
         gameObject.SetActive(false);
+        Debug.Log("[GameFinishScreen] Start 初始状态设置完成");
     }
 
     private void OnMenuButtonClick()
     {
-        if(GameObject.Find("__GAME_Control__") != null)
+        if(GameObject.Find("__GAME_Control__") != null) // 正式游戏时
+        {
             GameController.instance.LoadScene("MainMenu");
+        }            
     }
 
     private void OnExitButtonClick()
@@ -39,6 +44,7 @@ public class GameFinishScreen : MonoBehaviour, ILevelFinishService
 
     private void OnRestartButtonClick()
     {
+        OnLevelRetryEvent.Invoke(); // 触发重试事件，通知游戏控制器重置关卡
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

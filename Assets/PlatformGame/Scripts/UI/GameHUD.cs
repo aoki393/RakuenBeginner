@@ -22,11 +22,12 @@ public class GameHUD : MonoBehaviour, ILevelHUDService
 
     private void Start()
     {
-        InitializeLevelData();
+        // InitializeLevelData();
         TryRegisterAsService();
+        Debug.Log("[GameHUD] Start 初始状态设置完成");
     }
 
-    private void InitializeLevelData()
+    public void InitializeLevelData() // 每次进入关卡都要初始化数据
     {
         CurrentLevelIndex = GetCurrentLevelIndex();
         currentLevelConfig = GetCurrentLevelConfig();
@@ -39,6 +40,8 @@ public class GameHUD : MonoBehaviour, ILevelHUDService
         
         UpdateStarUI();
         UpdateCoinUI();
+
+        Debug.Log($"[GameHUD] 初始化关卡数据：Level {CurrentLevelIndex}，总星星 {totalStars}，总金币 {totalCoins}");
     }
     private void TryRegisterAsService()
     {
@@ -138,9 +141,9 @@ public class GameHUD : MonoBehaviour, ILevelHUDService
         string sceneName = SceneManager.GetActiveScene().name;
         string[] parts = sceneName.Split(' ');
         
-        if (!int.TryParse(parts[1], out int levelIndex))
+        if (parts.Length < 2 || !int.TryParse(parts[1], out int levelIndex))
         {
-            Debug.LogError($"关卡数字解析失败：'{parts[1]}' 不是有效的数字（场景名：'{sceneName}'）");
+            Debug.LogError($"关卡数字解析失败：场景名'{sceneName}'不符合'Level XX'格式");
             return -1;
         }
         

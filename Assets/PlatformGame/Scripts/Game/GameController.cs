@@ -36,6 +36,10 @@ namespace PlatformGame
 			}
 			
 		}
+		public void QuitGame()
+		{
+			Application.Quit();
+		}
 
 		/// <summary>
 		/// 锁定鼠标光标，菜单呼出时才能看见鼠标
