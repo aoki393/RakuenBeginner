@@ -30,11 +30,11 @@ namespace PlatformGame
             btnquit.onClick.AddListener(OnQuitClicked);   
 
             gameObject.SetActive(false); // 初始状态隐藏面板，等待游戏暂停时显示  
-            Debug.Log("[PausePanelController] Start 初始状态设置完成");       
+            // Debug.Log("[PausePanelController] Start 初始状态设置完成");       
         }
 
         private void OnPause(bool isPaused){
-            Debug.Log($"OnPause: {isPaused}");
+            // Debug.Log($"OnPause: {isPaused}");
             if(isPaused)
             {
                 Show(); // 显示暂停面板
@@ -54,6 +54,7 @@ namespace PlatformGame
             // Hide();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             GamePauser.instance.TogglePause(); // 😅
+            GameController.SetCursorVisible(true); // 😅
             Debug.Log("TODO: 重新开始当前关卡");
         }
         void OnMenuClicked()

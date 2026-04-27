@@ -34,9 +34,6 @@ namespace PLAYERTWO.PlatformerProject
         public static string LevelCompleteDoor = "Volume/LevelCompleteDoor";
         public static string Star = "Collectable/Star";
         public static string Coin = "Collectable/Coin";
-        // public static string MovingPlatform = "MovingPlatform";
-
-
 
         /// 危险区域或陷阱的标签。
         /// 用于判定伤害区域（如尖刺、火焰等）。

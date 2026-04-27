@@ -11,6 +11,9 @@ namespace PlatformGame
     {
         public GameObject mainMenuCanvas;
         public GameObject gameCanvas;
+        public GameObject systemCanvas;
+        private GameObject darkMask;
+        
         [Header("Game Level UI")]
         private PausePanelController pausePanelController;
         private GameHUD gameHUD;
@@ -33,6 +36,9 @@ namespace PlatformGame
 
             GameLoader.instance.OnLoadFinish.AddListener(OnLoadFinish); // 监听直至游戏结束，无需手动移除监听
 
+            systemCanvas.SetActive(true); // 系统UI一直显示
+            darkMask = systemCanvas.transform.Find("DarkMask").gameObject;
+
             gameCanvas.SetActive(true);
             GetLevelUIComponent(); // 一开始在MainMenu就初始化一下Level相关的UI
 
@@ -42,6 +48,7 @@ namespace PlatformGame
         {
             yield return null; // 等待一帧，同一帧多次SetActive是无效的
             gameCanvas.SetActive(false);
+            darkMask.SetActive(false);
         }
 
         public void RetryLevel()
@@ -69,6 +76,7 @@ namespace PlatformGame
             {
                 mainMenuCanvas.SetActive(true);
                 gameCanvas.SetActive(false);
+                GameController.SetCursorVisible(true);
             }
             else if (sceneName.StartsWith("Level"))
             {

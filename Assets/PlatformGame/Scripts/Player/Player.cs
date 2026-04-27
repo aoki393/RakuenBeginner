@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace PLAYERTWO.PlatformerProject
@@ -44,8 +45,7 @@ namespace PLAYERTWO.PlatformerProject
             Stats = GetComponent<PlayerStatsManager>();
             InitializeStateManager();
 
-			Inputs.actions.Disable(); // 初始禁用输入，通过关卡的LevelStartPanel按钮启用
-			Debug.Log("Player Awake");
+			// StartCoroutine(DisableInput()); // 初始禁用输入，通过关卡的LevelStartPanel按钮启用
 
 			// health = GetComponent<Health>();
 
@@ -56,7 +56,28 @@ namespace PLAYERTWO.PlatformerProject
 			{
 				Debug.LogError("初始Checkpoint 没有配置！");
 			}
+			StartCoroutine(DisableInput()); // 初始禁用输入，通过关卡的LevelStartPanel按钮启用
 		}
+
+		IEnumerator DisableInput()
+		{
+			yield return null;
+			Inputs.actions.Disable();
+			Debug.Log("初始禁用输入");			
+		}
+
+		protected override void OnUpdate()
+        {
+            base.OnUpdate();
+
+			if(States.Current is not WallClimbingPlayerState)
+			{
+				TryStartWallClimbing();
+			}			
+
+        }
+
+#region 游泳相关
 		protected virtual void OnTriggerStay(Collider other)
 		{			
 			if (other.CompareTag(GameTags.VolumeWater))
@@ -89,6 +110,18 @@ namespace PLAYERTWO.PlatformerProject
 			onWater = false;
 		}
 
+		public virtual void WaterAcceleration(Vector3 direction)
+		{
+			Accelerate(direction, Stats.current.waterTurningDrag, Stats.current.swimAcceleration, Stats.current.swimTopSpeed);
+		}
+		public virtual void WaterFaceDirection(Vector3 direction)
+		{
+			FaceDirection(direction, Stats.current.waterRotationSpeed);
+		}
+
+#endregion
+
+#region 重力、加速、转向、跳跃
         public virtual void Gravity()
 		{
 			if (!isGrounded && verticalVelocity.y > -Stats.current.gravityTopSpeed)
@@ -200,16 +233,10 @@ namespace PLAYERTWO.PlatformerProject
 			// else
 			// 	Decelerate(Stats.current.friction);      // 普通摩擦
 		}
+#endregion
 
-		public virtual void WaterAcceleration(Vector3 direction)
-		{
-			Accelerate(direction, Stats.current.waterTurningDrag, Stats.current.swimAcceleration, Stats.current.swimTopSpeed);
-		}
-		public virtual void WaterFaceDirection(Vector3 direction)
-		{
-			FaceDirection(direction, Stats.current.waterRotationSpeed);
-		}
-
+		
+#region Enemy交互
         public override void ApplyDamage(int amount, Vector3 origin)
         {
             // if(!health.IsEmpty && !health.Recovering)
@@ -266,18 +293,10 @@ namespace PLAYERTWO.PlatformerProject
 				inEnemyIsland=false;
 			}
 		}
+#endregion
 
-		protected override void OnUpdate()
-        {
-            base.OnUpdate();
-
-			if(States.Current is not WallClimbingPlayerState)
-			{
-				TryStartWallClimbing();
-			}			
-
-        }
-
+		
+#region 攀爬、滑翔
 		public bool CanStartWallClimbing
 		{
 			get
@@ -345,6 +364,7 @@ namespace PLAYERTWO.PlatformerProject
 			}
 				
 		}
+#endregion
 
         // void OnDrawGizmos()
         // {

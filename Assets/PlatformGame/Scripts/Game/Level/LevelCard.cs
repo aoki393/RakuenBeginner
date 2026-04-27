@@ -48,15 +48,15 @@ public class LevelCard : MonoBehaviour
             if (completedTimeText != null)
                 completedTimeText.text = $"{currentRecord.completedTime}";
             
-            if (completedSkin != null) completedSkin.gameObject.SetActive(true);
+            if (completedSkin != null) completedSkin.SetActive(true);
 
-            if(currentRecord.starEarned == currentLevelConfig.totalStar)
+            if(currentRecord.starEarned >= currentLevelConfig.totalStar)
             {
-                if (completedStarImage != null) completedStarImage.gameObject.SetActive(true);
+                if (completedStarImage != null) completedStarImage.SetActive(true);
             }
-            if(currentRecord.coinEarned == currentLevelConfig.totalCoin)
+            if(currentRecord.coinEarned >= currentLevelConfig.totalCoin)
             {
-                if (completedCoinImage != null) completedCoinImage.gameObject.SetActive(true);
+                if (completedCoinImage != null) completedCoinImage.SetActive(true);
             }
         }
         else

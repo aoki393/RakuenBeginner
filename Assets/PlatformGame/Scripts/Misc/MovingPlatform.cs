@@ -9,7 +9,7 @@ public class MovingPlatform : MonoBehaviour
         waypoints=GetComponent<WaypointManager>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         var position = transform.position;
         var target = waypoints.Current.position;

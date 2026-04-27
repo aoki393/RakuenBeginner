@@ -67,7 +67,7 @@ namespace PLAYERTWO.PlatformerProject
 			m_cameraTargetPitch = initialAngle; // 设定初始俯仰角
 			m_cameraTargetYaw = player.transform.rotation.eulerAngles.y; // 根据玩家朝向设定相机水平角
 
-            Debug.Log($"PlayerCamera: Reset to initial angle: {initialAngle}, yaw: {m_cameraTargetYaw}");
+            // Debug.Log($"PlayerCamera: Reset to initial angle: {initialAngle}, yaw: {m_cameraTargetYaw}");
 
 			MoveTarget();
 			// m_brain.ManualUpdate(); // 强制刷新相机

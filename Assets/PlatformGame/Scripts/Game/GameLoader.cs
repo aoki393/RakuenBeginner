@@ -37,13 +37,13 @@ namespace PlatformGame
 		/// 场景加载开始前的延迟时间（单位：秒）。
 		/// 主要用于在加载界面显示前留出缓冲，让过渡更自然。
 		/// </summary>
-		public float startDelay = 1f;
+		public float startDelay = 0.5f;
 
 		/// <summary>
 		/// 场景加载完成后的延迟时间（单位：秒）。
 		/// 主要用于加载完成后停留加载界面，避免闪屏。
 		/// </summary>
-		public float finishDelay = 1f;
+		public float finishDelay = 0.5f;
 
 		/// <summary>
 		/// 当前是否正在加载中。

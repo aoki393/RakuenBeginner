@@ -24,7 +24,7 @@ public class GameHUD : MonoBehaviour, ILevelHUDService
     {
         // InitializeLevelData();
         TryRegisterAsService();
-        Debug.Log("[GameHUD] Start 初始状态设置完成");
+        // Debug.Log("[GameHUD] Start 初始状态设置完成");
     }
 
     public void InitializeLevelData() // 每次进入关卡都要初始化数据
@@ -41,36 +41,12 @@ public class GameHUD : MonoBehaviour, ILevelHUDService
         UpdateStarUI();
         UpdateCoinUI();
 
-        Debug.Log($"[GameHUD] 初始化关卡数据：Level {CurrentLevelIndex}，总星星 {totalStars}，总金币 {totalCoins}");
+        Debug.Log($"[GameHUD] 初始化关卡数据：{currentLevelConfig.sceneName}，总星星 {totalStars}，总金币 {totalCoins}");
     }
     private void TryRegisterAsService()
     {
         LevelUIServiceLocator.RegisterHUDService(this);
-        Debug.Log("[GameHUD] 已注册 LevelUI HUD 服务");
-        // bool isFormalGame = GameObject.Find("__GAME_Control__") != null;
-        
-        // if (isFormalGame)
-        // {
-        //     // 正式游戏：可能有全局 UI 服务，这个测试用 GameHUD 不应该注册
-        //     if (!LevelUIServiceLocator.HasService)
-        //     {
-        //         // 理论上不应该发生，全局服务应该在 Awake 时注册了
-        //         Debug.LogWarning("[GameHUD] 正式游戏但无全局服务，临时注册自己");
-        //         LevelUIServiceLocator.Register(this);
-        //     }
-        //     else
-        //     {
-        //         // 已有全局服务，禁用自己
-        //         Debug.Log("[GameHUD] 正式游戏模式，禁用测试用 HUD");
-        //         gameObject.SetActive(false);
-        //     }
-        // }
-        // else
-        // {
-        //     // 测试模式：没有 __GAME_Control__，注册自己
-        //     LevelUIServiceLocator.Register(this);
-        //     Debug.Log("[GameHUD] 测试模式，已注册为 UI 服务");
-        // }
+        // Debug.Log("[GameHUD] 已注册 LevelUI HUD 服务");
     }
     // ========== 实现 ILevelUIService 接口 ==========
 
@@ -156,7 +132,7 @@ public class GameHUD : MonoBehaviour, ILevelHUDService
         if(GameObject.Find("__LEVEL_Manager__") == null)
         {
             if (levelDataSO != null && CurrentLevelIndex < levelDataSO.levels.Count)
-                return levelDataSO.levels[CurrentLevelIndex];
+                return levelDataSO.levels.Find(l => l.levelIndex == CurrentLevelIndex);
             
             Debug.LogError("[GameHUD] 无法获取测试用关卡配置");
             return null;

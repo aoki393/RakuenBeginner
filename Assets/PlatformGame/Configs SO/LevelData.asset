@@ -18,22 +18,22 @@ MonoBehaviour:
     totalCoin: 10
     sceneName: Level 01
   - levelIndex: 2
-    totalStar: 3
-    totalCoin: 15
+    totalStar: 5
+    totalCoin: 10
     sceneName: Level 02
   - levelIndex: 3
     totalStar: 5
-    totalCoin: 10
+    totalCoin: 15
     sceneName: Level 03
   - levelIndex: 4
     totalStar: 5
-    totalCoin: 15
+    totalCoin: 20
     sceneName: Level 04
   - levelIndex: 5
     totalStar: 5
-    totalCoin: 15
+    totalCoin: 25
     sceneName: Level 05
   - levelIndex: 6
-    totalStar: 5
-    totalCoin: 15
+    totalStar: 8
+    totalCoin: 25
     sceneName: Level 06

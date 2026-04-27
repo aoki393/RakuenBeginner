@@ -17,7 +17,7 @@ public class GameFinishScreen : MonoBehaviour, ILevelFinishService
     void Start()
     {
         LevelUIServiceLocator.RegisterLevelFinishService(this);
-        Debug.Log("[GameFinishScreen] 已注册 LevelUI Finish 服务");
+        // Debug.Log("[GameFinishScreen] 已注册 LevelUI Finish 服务");
         
         restartButton.onClick.AddListener(OnRestartButtonClick);
         exitButton.onClick.AddListener(OnExitButtonClick);
@@ -26,7 +26,7 @@ public class GameFinishScreen : MonoBehaviour, ILevelFinishService
         uiAnimator=GetComponent<UIAnimator>();
 
         gameObject.SetActive(false);
-        Debug.Log("[GameFinishScreen] Start 初始状态设置完成");
+        // Debug.Log("[GameFinishScreen] Start 初始状态设置完成");
     }
 
     private void OnMenuButtonClick()

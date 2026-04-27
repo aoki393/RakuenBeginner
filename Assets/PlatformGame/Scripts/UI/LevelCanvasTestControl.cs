@@ -41,5 +41,7 @@ public class LevelCanvasTestControl : MonoBehaviour
         gameHUD.gameObject.SetActive(true);
         pausePanelController.gameObject.SetActive(true); // 先激活使事件订阅生效，在面板里再隐藏
         gameFinishScreen.gameObject.SetActive(true); // 先激活使UIServiceLocator 注册，在面板里再隐藏
+
+        gameHUD.InitializeLevelData();
     }
 }

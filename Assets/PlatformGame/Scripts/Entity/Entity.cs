@@ -395,7 +395,9 @@ namespace PLAYERTWO.PlatformerProject
 		protected virtual void HandleSlopeLimit(RaycastHit hit) { }
 
 		// 处理高地（空实现，子类重写）
-		protected virtual void HandleHighLedge(RaycastHit hit) { Debug.Log("HandleHighLedge 暂未实现"); }
+		protected virtual void HandleHighLedge(RaycastHit hit) { 
+			// Debug.Log("HandleHighLedge 暂未实现"); 
+		}
 
 		protected virtual void OnUpdate() { }
 
