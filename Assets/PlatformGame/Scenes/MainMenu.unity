@@ -9345,6 +9345,14 @@ PrefabInstance:
       value: __GAME_Control__
       objectReference: {fileID: 0}
     - target: {fileID: 2231708925242612138, guid: 8fe9b866e5024af46a9570ffb514d109, type: 3}
+      propertyPath: startDelay
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2231708925242612138, guid: 8fe9b866e5024af46a9570ffb514d109, type: 3}
+      propertyPath: finishDelay
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2231708925242612138, guid: 8fe9b866e5024af46a9570ffb514d109, type: 3}
       propertyPath: loadingScreen
       value: 
       objectReference: {fileID: 261357759}

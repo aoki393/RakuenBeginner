@@ -11,10 +11,10 @@ public class LevelCanvasTestControl : MonoBehaviour
     {
         if(GameObject.Find("__GAME_Control__") != null)
         {
-            Debug.Log("存在__GAME_Control__，不使用局内测试用Canvas");
             gameObject.SetActive(false);
             return;
         }
+        Debug.Log("使用局内测试用Canvas");
 
         if(levelStartPanel == null)
         {

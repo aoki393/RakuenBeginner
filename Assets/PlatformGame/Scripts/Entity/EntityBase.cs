@@ -29,7 +29,7 @@ namespace PLAYERTWO.PlatformerProject
 			set { velocity = new Vector3(velocity.x, value.y, velocity.z); }
 		}
 
-		public Vector3 lastPosition { get; set; }                     // 上一帧的位置
+		// public Vector3 lastPosition { get; set; }                     // 上一帧的位置
 
 		// 实体当前位置（角色控制器中心加位置）
 		public Vector3 Position => transform.position + center; // 注意这里的Position是角色控制器中心位置，不是Transform的位置，Transform的位置是胶囊体底部位置
@@ -40,7 +40,7 @@ namespace PLAYERTWO.PlatformerProject
 		// 脚步位置（底部位置，考虑了stepOffset）
 		public Vector3 stepPosition => Position - transform.up * (height * 0.5f - controller.stepOffset);
 
-		public float positionDelta { get; protected set; }            // 当前位置和上一帧位置的距离
+		// public float positionDelta { get; protected set; }            // 当前位置和上一帧位置的距离
 
 		public float lastGroundTime { get; protected set; }           // 上一次处于地面时间
 

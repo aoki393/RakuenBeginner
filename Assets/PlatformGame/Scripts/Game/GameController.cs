@@ -7,8 +7,10 @@ namespace PlatformGame
     [RequireComponent(typeof(GameInputManager))]
     public class GameController : Singleton<GameController>
 	{
-		protected GameLoader m_loader => GameLoader.instance;
-		protected GamePauser m_pauser => GamePauser.instance;
+		[Header("Cursor Visible Setting")]
+		[SerializeField] private bool setCursor = true;
+		protected GameLoader m_loader => GameLoader.Instance;
+		protected GamePauser m_pauser => GamePauser.Instance;
 		protected GameInputManager m_inputManager;
 		// public virtual void AddRetries(int amount) => m_game.retries += amount;
 
@@ -48,7 +50,8 @@ namespace PlatformGame
 		public static void SetCursorVisible(bool value )
 		{
 	#if UNITY_STANDALONE || UNITY_WEBGL
-			Cursor.visible = value;
+			if(Instance.setCursor)
+				Cursor.visible = value;
 			// Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
 	#endif
 		}

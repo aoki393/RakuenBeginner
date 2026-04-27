@@ -71,7 +71,7 @@ public class LevelCard : MonoBehaviour
     // 点击卡片进入关卡
     public void OnCardClick()
     {
-        GameController.instance.LoadScene(currentLevelConfig.sceneName); // 用的配置里的名字，所以配置里sceneName要和场景文件名一致     
+        GameController.Instance.LoadScene(currentLevelConfig.sceneName); // 用的配置里的名字，所以配置里sceneName要和场景文件名一致     
         levelSelectScreen.Hide(); // 隐藏选择界面
     }
 }

@@ -34,7 +34,7 @@ namespace PlatformGame
                 Debug.LogError("Canvas未赋值");
             }
 
-            GameLoader.instance.OnLoadFinish.AddListener(OnLoadFinish); // 监听直至游戏结束，无需手动移除监听
+            GameLoader.Instance.OnLoadFinish.AddListener(OnLoadFinish); // 监听直至游戏结束，无需手动移除监听
 
             systemCanvas.SetActive(true); // 系统UI一直显示
             darkMask = systemCanvas.transform.Find("DarkMask").gameObject;

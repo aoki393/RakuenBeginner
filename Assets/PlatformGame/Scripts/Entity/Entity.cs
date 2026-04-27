@@ -28,14 +28,14 @@ namespace PLAYERTWO.PlatformerProject
 		}
 
 		//收尾工作、位置/相机最终修正,放LateUpdate里合适
-		protected virtual void LateUpdate()
-		{
-			if (controller.enabled)
-			{
-				HandlePosition();
-				HandlePenetration();
-			}
-		}
+		// protected virtual void LateUpdate()
+		// {
+		// 	if (controller.enabled)
+		// 	{
+		// 		HandlePosition();
+		// 		HandlePenetration();
+		// 	}
+		// }
 		
 		// 初始化角色控制器组件（CharacterController）
 		// 负责角色的基本移动、碰撞等物理交互
@@ -244,60 +244,60 @@ namespace PLAYERTWO.PlatformerProject
 		}
 
 		// 记录位置变化，用于计算位移
-		protected virtual void HandlePosition()
-		{
-		    // 计算当前位置与上一帧位置的距离（位移长度）
-		    positionDelta = (Position - lastPosition).magnitude;
+		// protected virtual void HandlePosition()
+		// {
+		//     // 计算当前位置与上一帧位置的距离（位移长度）
+		//     positionDelta = (Position - lastPosition).magnitude;
 
-		    // 更新上一帧位置
-		    lastPosition = Position;
-		}
+		//     // 更新上一帧位置
+		//     lastPosition = Position;
+		// }
 
 		// 处理碰撞体的穿透修正,碰到别的东西给反推回来
-		protected virtual void HandlePenetration()
-		{
-		    // 获取盒碰撞器在 X/Z 平面的半宽
-		    var xzSize = m_penetratorCollider.size.x * 0.5f;
-		    // 获取盒碰撞器在 Y 方向的半高（考虑 stepOffset 的一半）
-		    var ySize = (height - controller.stepOffset * 0.5f) * 0.5f;
-		    // 盒碰撞器的中心点（向上偏移 stepOffset 一半）
-		    var origin = Position + Vector3.up * controller.stepOffset * 0.5f;
-		    // 盒碰撞器的半尺寸
-		    var halfExtents = new Vector3(xzSize, ySize, xzSize);
+		// protected virtual void HandlePenetration()
+		// {
+		//     // 获取盒碰撞器在 X/Z 平面的半宽
+		//     var xzSize = m_penetratorCollider.size.x * 0.5f;
+		//     // 获取盒碰撞器在 Y 方向的半高（考虑 stepOffset 的一半）
+		//     var ySize = (height - controller.stepOffset * 0.5f) * 0.5f;
+		//     // 盒碰撞器的中心点（向上偏移 stepOffset 一半）
+		//     var origin = Position + Vector3.up * controller.stepOffset * 0.5f;
+		//     // 盒碰撞器的半尺寸
+		//     var halfExtents = new Vector3(xzSize, ySize, xzSize);
 
-		    // 检测所有与盒碰撞器重叠的物体，忽略触发器
-		    var overlaps = Physics.OverlapBoxNonAlloc(
-		        origin, 
-		        halfExtents, 
-		        m_penetrationBuffer,
-		        Quaternion.identity, 
-		        Physics.DefaultRaycastLayers, 
-		        QueryTriggerInteraction.Ignore
-		    );
+		//     // 检测所有与盒碰撞器重叠的物体，忽略触发器
+		//     var overlaps = Physics.OverlapBoxNonAlloc(
+		//         origin, 
+		//         halfExtents, 
+		//         m_penetrationBuffer,
+		//         Quaternion.identity, 
+		//         Physics.DefaultRaycastLayers, 
+		//         QueryTriggerInteraction.Ignore
+		//     );
 
-		    // 遍历所有重叠的碰撞体
-		    for (int i = 0; i < overlaps; i++)
-		    {
-		        // 排除触发器、自身，并且只在静止或与平台接触时处理
-		        if (!m_penetrationBuffer[i].isTrigger && m_penetrationBuffer[i].transform != transform &&
-		            (lateralVelocity.sqrMagnitude == 0 || m_penetrationBuffer[i].CompareTag(GameTags.Platform)))
-		        {
-		            // ComputePenetration 计算两个碰撞体的分离向量和距离
-		            if (Physics.ComputePenetration(
-		                m_penetratorCollider, Position, Quaternion.identity,
-		                m_penetrationBuffer[i], m_penetrationBuffer[i].transform.position,
-		                m_penetrationBuffer[i].transform.rotation, 
-		                out var direction, out float distance))
-		            {
-		                // 只保留水平方向的推离（避免角色被垂直方向顶飞）
-		                var pushDirection = new Vector3(direction.x, 0, direction.z).normalized;
+		//     // 遍历所有重叠的碰撞体
+		//     for (int i = 0; i < overlaps; i++)
+		//     {
+		//         // 排除触发器、自身，并且只在静止或与平台接触时处理
+		//         if (!m_penetrationBuffer[i].isTrigger && m_penetrationBuffer[i].transform != transform &&
+		//             (lateralVelocity.sqrMagnitude == 0 || m_penetrationBuffer[i].CompareTag(GameTags.Platform)))
+		//         {
+		//             // ComputePenetration 计算两个碰撞体的分离向量和距离
+		//             if (Physics.ComputePenetration(
+		//                 m_penetratorCollider, Position, Quaternion.identity,
+		//                 m_penetrationBuffer[i], m_penetrationBuffer[i].transform.position,
+		//                 m_penetrationBuffer[i].transform.rotation, 
+		//                 out var direction, out float distance))
+		//             {
+		//                 // 只保留水平方向的推离（避免角色被垂直方向顶飞）
+		//                 var pushDirection = new Vector3(direction.x, 0, direction.z).normalized;
 
-		                // 直接把角色位置沿推离方向移动（修正穿透）
-		                transform.position += pushDirection * distance;
-		            }
-		        }
-		    }
-		}
+		//                 // 直接把角色位置沿推离方向移动（修正穿透）
+		//                 transform.position += pushDirection * distance;
+		//             }
+		//         }
+		//     }
+		// }
 
 
 		// 进入地面状态（角色刚刚落地时调用）
@@ -379,7 +379,7 @@ namespace PLAYERTWO.PlatformerProject
 		        localSlopeDirection = new Vector3(groundNormal.x, 0, groundNormal.z).normalized;
 		        // 如果地面是平台（tag = Platform），让角色成为平台的子物体，跟随平台移动
 		        // 否则取消父子关系
-		        transform.parent = hit.collider.CompareTag(GameTags.Platform) ? hit.transform : null;
+		        // transform.parent = hit.collider.CompareTag(GameTags.Platform) ? hit.transform : null; // 改用实时计算Move，见Player.HandlePlatformMoveFix()
 		    }
 		}
 

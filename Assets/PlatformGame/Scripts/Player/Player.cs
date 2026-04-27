@@ -1,4 +1,6 @@
 using System.Collections;
+using System.ComponentModel.Design;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace PLAYERTWO.PlatformerProject
@@ -12,6 +14,7 @@ namespace PLAYERTWO.PlatformerProject
         // States在Entity里已定义
         public PlayerInputManager Inputs { get; protected set; }
         public PlayerStatsManager Stats { get; protected set; }
+		public PlayerCamera playerCamera;
 
 		public PlayerEvents playerEvents;
 		public bool canJumpInAir=true; // 调试用，允许在空中跳跃
@@ -36,16 +39,18 @@ namespace PLAYERTWO.PlatformerProject
 		public Vector3 currentWallNormal { get; set; }
 		public bool ClimbTop { get; set; } = false;
 
-		
+		[Header("PlatformMoveFix")]
+		private Transform currentPlatform;
+		private Vector3 lastPlatformPosition;		
 
         protected override void Awake()
         {
             base.Awake();
             Inputs = GetComponent<PlayerInputManager>();
             Stats = GetComponent<PlayerStatsManager>();
+			if(playerEvents == null)
+				playerCamera = FindFirstObjectByType<PlayerCamera>();
             InitializeStateManager();
-
-			// StartCoroutine(DisableInput()); // 初始禁用输入，通过关卡的LevelStartPanel按钮启用
 
 			// health = GetComponent<Health>();
 
@@ -76,6 +81,36 @@ namespace PLAYERTWO.PlatformerProject
 			}			
 
         }
+        void LateUpdate()
+        {
+            HandlePlatformMoveFix(); // 不放LateUpdate会有抖动
+        }
+
+        void OnTriggerEnter(Collider other)
+		{
+			if(other.CompareTag(GameTags.Checkpoint))
+			{
+				LastCheckpoint = other.transform;
+			}
+			if(other.CompareTag(GameTags.EnemyIsland))
+			{
+				inEnemyIsland=true;
+			}
+			if(other.CompareTag(GameTags.LevelCompleteDoor))
+			{
+				// 玩家自身胜利动作播放之类的，数据保存和UI显示在LevelCompleteDoor上执行这里不用处理
+				playerEvents.OnLevelComplete?.Invoke(); 
+				States.Change<IdlePlayerState>();
+				Inputs.actions.Disable(); // 禁用输入				
+			}
+		}
+		void OnTriggerExit(Collider other)
+		{
+			if(other.CompareTag(GameTags.EnemyIsland))
+			{
+				inEnemyIsland=false;
+			}
+		}
 
 #region 游泳相关
 		protected virtual void OnTriggerStay(Collider other)
@@ -260,39 +295,19 @@ namespace PLAYERTWO.PlatformerProject
 
 			velocity = Vector3.zero; // 清空速度
 			transform.SetPositionAndRotation(LastCheckpoint.position, Quaternion.Euler(0, -90, 0)); // 重置姿态
-			inEnemyIsland=false; // 狗日的，瞬移没受到Island边缘的Trigger检测，所以需要手动重置
+			playerCamera.Reset(); // 重置相机
+			inEnemyIsland=false; // 艹，瞬移没受到Island边缘的Trigger检测，所以需要手动重置
 
             States.Change<IdlePlayerState>();
+			StartCoroutine(EnableControllerDelay());
+		}
 
+		IEnumerator EnableControllerDelay()
+		{
+			yield return new WaitForSeconds(0.5f);
 			controller.enabled = true;
 		}
-
-		void OnTriggerEnter(Collider other)
-		{
-			if(other.CompareTag(GameTags.Checkpoint))
-			{
-				LastCheckpoint = other.transform;
-			}
-			if(other.CompareTag(GameTags.EnemyIsland))
-			{
-				inEnemyIsland=true;
-			}
-			if(other.CompareTag(GameTags.LevelCompleteDoor))
-			{
-				// 玩家自身胜利动作播放之类的，数据保存和UI显示在LevelCompleteDoor上执行这里不用处理
-				playerEvents.OnLevelComplete?.Invoke(); 
-				States.Change<IdlePlayerState>();
-				Inputs.actions.Disable(); // 禁用输入
-				
-			}
-		}
-		void OnTriggerExit(Collider other)
-		{
-			if(other.CompareTag(GameTags.EnemyIsland))
-			{
-				inEnemyIsland=false;
-			}
-		}
+		
 #endregion
 
 		
@@ -365,6 +380,41 @@ namespace PLAYERTWO.PlatformerProject
 				
 		}
 #endregion
+
+		private void HandlePlatformMoveFix()
+		{
+			if (groundHit.collider.CompareTag(GameTags.Platform))
+			{	
+				Transform newPlatform = groundHit.collider.transform;
+            
+				// 切换平台时更新记录
+				if (currentPlatform != newPlatform)
+				{
+					currentPlatform = newPlatform;
+					lastPlatformPosition = currentPlatform.position;
+				}
+				
+				// 计算平台移动差值，用 Move() 跟随
+				Vector3 platformDelta = currentPlatform.position - lastPlatformPosition;
+				if (platformDelta != Vector3.zero)
+				{
+					controller.Move(platformDelta);
+				}
+				
+				lastPlatformPosition = currentPlatform.position;		
+
+				// 可选：每帧微调确保精确
+				// Vector3 expectedPos = transform.position + platformDelta;
+				// if (Vector3.Distance(transform.position, expectedPos) > 0.001f)
+				// {
+				// 	controller.Move(expectedPos - transform.position);
+				// }
+			}
+			else
+			{
+				currentPlatform = null;
+			}
+		}
 
         // void OnDrawGizmos()
         // {

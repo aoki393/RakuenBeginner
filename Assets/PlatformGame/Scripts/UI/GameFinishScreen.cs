@@ -33,7 +33,7 @@ public class GameFinishScreen : MonoBehaviour, ILevelFinishService
     {
         if(GameObject.Find("__GAME_Control__") != null) // 正式游戏时
         {
-            GameController.instance.LoadScene("MainMenu");
+            GameController.Instance.LoadScene("MainMenu");
         }            
     }
 

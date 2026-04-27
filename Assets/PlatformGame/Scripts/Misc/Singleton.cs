@@ -12,7 +12,7 @@ namespace PlatformGame
 
         protected static T m_instance;
 
-        public static T instance
+        public static T Instance
         {
             get
             {
@@ -27,7 +27,7 @@ namespace PlatformGame
 
         protected virtual void Awake()
         {
-            if (instance != this)
+            if (Instance != this)
             {
                 Destroy(gameObject);
             }

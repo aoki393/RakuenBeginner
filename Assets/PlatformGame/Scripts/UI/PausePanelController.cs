@@ -22,7 +22,7 @@ namespace PlatformGame
         {
             uiAnimator = GetComponent<UIAnimator>(); // 面板上面需要挂载 UIAnimator 组件
 
-            GamePauser.instance.OnPauseEvent.AddListener(OnPause);
+            GamePauser.Instance.OnPauseEvent.AddListener(OnPause);
 
             btnresume.onClick.AddListener(OnResumeClicked);
             btnrestart.onClick.AddListener(OnRestartClicked);
@@ -47,21 +47,21 @@ namespace PlatformGame
 
         void OnResumeClicked()
         {
-            GamePauser.instance.TogglePause();
+            GamePauser.Instance.TogglePause();
         }
         void OnRestartClicked()
         {
             // Hide();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            GamePauser.instance.TogglePause(); // 😅
+            GamePauser.Instance.TogglePause(); // 😅
             GameController.SetCursorVisible(true); // 😅
             Debug.Log("TODO: 重新开始当前关卡");
         }
         void OnMenuClicked()
         {
             // TODO: 保存关卡数据
-            GameController.instance.LoadScene("MainMenu");
-            GamePauser.instance.TogglePause(); // 必须恢复TimeScale，否则LoadScene的协程会卡住😅
+            GameController.Instance.LoadScene("MainMenu");
+            GamePauser.Instance.TogglePause(); // 必须恢复TimeScale，否则LoadScene的协程会卡住😅
         }
         void OnQuitClicked()
         {
