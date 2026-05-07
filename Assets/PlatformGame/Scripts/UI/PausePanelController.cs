@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
+using PLAYERTWO.PlatformerProject;
 
 namespace PlatformGame
 {   
@@ -12,7 +12,6 @@ namespace PlatformGame
     [RequireComponent(typeof(UIAnimator))]
     public class PausePanelController : MonoBehaviour
     {
-        // public GamePauser gamePauser=GamePauser.instance; // 响应游戏暂停事件，同时也调用游戏暂停方法
         private UIAnimator uiAnimator; // Show和Hide动画交给 UIAnimator 组件处理
         public Button btnresume;
         public Button btnrestart;
@@ -51,15 +50,15 @@ namespace PlatformGame
         }
         void OnRestartClicked()
         {
+            Player.isRestarting=true; // 用于让Player因Restart初始化时不禁用输入
             // Hide();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             GamePauser.Instance.TogglePause(); // 😅
-            GameController.SetCursorVisible(true); // 😅
-            Debug.Log("TODO: 重新开始当前关卡");
+            // GameController.SetCursorVisible(true); // 😅
+
         }
         void OnMenuClicked()
         {
-            // TODO: 保存关卡数据
             GameController.Instance.LoadScene("MainMenu");
             GamePauser.Instance.TogglePause(); // 必须恢复TimeScale，否则LoadScene的协程会卡住😅
         }

@@ -43,6 +43,8 @@ namespace PLAYERTWO.PlatformerProject
 		private Transform currentPlatform;
 		private Vector3 lastPlatformPosition;		
 
+		public static bool isRestarting = false;  // 静态标志，用于判断是首次进入关卡还是Restart进入
+
         protected override void Awake()
         {
             base.Awake();
@@ -61,14 +63,25 @@ namespace PLAYERTWO.PlatformerProject
 			{
 				Debug.LogError("初始Checkpoint 没有配置！");
 			}
-			StartCoroutine(DisableInput()); // 初始禁用输入，通过关卡的LevelStartPanel按钮启用
+
+			// 初始禁用输入
+			if(isRestarting)
+			{
+				isRestarting = false;
+				Debug.Log("Restart关卡时，Player初始化不禁用输入");
+			}
+			else
+			{
+				StartCoroutine(DisableInput()); // 初始禁用输入，通过LevelStartPanel按钮启用
+			}
+			
 		}
 
 		IEnumerator DisableInput()
 		{
 			yield return null;
 			Inputs.actions.Disable();
-			Debug.Log("初始禁用输入");			
+			Debug.Log("Player初始化禁用输入，等待手动开启关卡后激活");	
 		}
 
 		protected override void OnUpdate()
